@@ -1,0 +1,1256 @@
+\documentclass{report}
+
+\usepackage{amsmath,amssymb,amsthm,biblatex,enumitem,graphicx,marvosym,mathtools,wrapfig}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\F}{\mathbb{F}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\H}{\mathbb{H}}
+\newcommand{\G}{\mathbb{G}}
+
+\newcommand{\two}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}\newtheorem*{definition}{Definition}
+\theoremstyle{definition}\newtheorem*{example}{Example}
+\theoremstyle{remark}\newtheorem*{remark}{Remark}
+
+\addbibresource{bibliography.bib}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+\vspace{1cm}
+\includegraphics[scale=0.2]{figures/imperial.pdf} \\
+\vspace{1cm}
+\textbf{\Large An Introduction to Finite Projective Planes} \\
+\vspace{2cm}
+\includegraphics[scale=0.2]{figures/order_2.jpg}
+\vfill
+Group 28 \\
+\vspace{1cm}
+Supervised by Dr Ambrus Pál \\
+\vspace{1cm}
+\begin{tabular}{lr}
+Abrunho, Jonathan & ja1416 \\
+Angdinata, David Kurniadi & dka316 \\
+Kim, Hyun Mog & hmk16 \\
+Pan, Yue & yp2415 \\
+Xing, Xuewei & xx1116 \\
+\end{tabular}
+\vspace{1cm} \\
+M2R \\
+Second Year Mathematics Group Project \\
+Department of Mathematics \\
+Imperial College London \\
+29 May 2018 - 20 June 2018
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\pagebreak
+
+\chapter*{Preface}
+
+\addcontentsline{toc}{chapter}{Preface}
+
+The aim of the project is to introduce the theory of finite projective planes of small orders to the reader. This is done by giving proofs of general propositions and widely-known theorems in the field without going into too much detail, as well as providing interesting side remarks throughout. The structure of the project is so as to fully explain the following table in an accessible order:
+
+\begin{center}
+\begin{tabular}{|r|l|}
+\hline
+order & non-isomorphic planes \\
+\hline
+2 & unique: Desarguesian \\
+3 & unique: Desarguesian \\
+4 & unique: Desarguesian \\
+5 & unique: Desarguesian \\
+6 & impossible (by Bruck-Ryser) \\
+7 & unique: Desarguesian \\
+8 & unique: Desarguesian \\
+9 & exactly 4: $ \Phi $, $ \Omega $, $ \Omega^D $, $ \Psi $ (by Lam, Kolesova, Thiel) \\
+10 & impossible (by Lam, Thiel, Scwierz) \\
+11 & at least 1: Desarguesian \\
+12 & unknown (conjectured to be impossible) \\
+13 & at least 1: Desarguesian \\
+14 & impossible (by Bruck-Ryser) \\
+\hline
+\end{tabular}
+\end{center}
+
+Chapter 1 introduces the axiomatic definition of projective planes and proves several elementary results derivable directly from the axioms. Chapter 2 discusses the existence and uniqueness of Desarguesian planes as well as some of its properties. Chapter 3 proves the non-existence of certain planes due to the Bruck-Ryser theorem and briefly touches on undiscovered planes of other orders. Chapter 4 justifies that there are in fact non-Desarguesian planes coordinatisable with quasi-fields that are not skew-fields. Each chapter has its own style of discussion, with the first chapter being geometric, the second chapter being algebraic, the third chapter being number theoretic, and the fourth chapter being a combination of all three.
+
+An assumption is made that the reader has elementary background knowledge of a few algebraic structures, including definitions and properties of groups, rings, and modules. The flow of information throughout each chapter should be highly accessible and easily followed by undergraduates with relatively little experience in algebra. An attempt is made to link these new ideas to their past experiences.
+
+Throughout the project, most sources of information were obtained from several library textbooks, but web resources were also used extensively for inaccessible articles of the past. The bibliography would contain most if not all of these sources, but some are explicitly mentioned in the text for direct references. All write-ups are done by the group unless otherwise stated.
+
+We would like to thank our supervisor Dr Ambrus Pál for support and guidance, as well as clarifications of any doubts we had, throughout the project duration. Without him, this project would be an impossibility.
+
+\chapter{Introduction}
+
+Informally, as in \cite{projectiveplane}, a projective plane is a surface without boundary derived from a usual plane by addition of a line at infinity. Just as a straight line in projective geometry contains a single point at infinity at which the endpoints meet, a plane in projective geometry contains a single line at infinity at which the edges of the plane meet. A projective plane can be constructed by gluing both pairs of opposite edges of a rectangle together giving both pairs a half-twist. It is a one-sided surface, but cannot be realized in three-dimensional space without crossing itself.
+
+\section{Background}
+
+A more formal definition is as follows.
+
+\begin{definition}[Projective plane]
+A projective plane $ \P $ is an ordered triple $ (P, L, I) $, where $ P $ is the \textbf{set of points $ p $} of $ \P $, $ L $ is the \textbf{set of lines $ l $} of $ \P $, and $ I \subseteq P \times L $ is the \textbf{incidence relation $ (\cdot, \cdot) $} satisfying the following axioms:
+\begin{enumerate}[label=(P\arabic*)]
+  \item for any two distinct points $ p_1, p_2 \in P $, there is a unique line $ l \in L $, such that $ (p_1, l), (p_2, l) \in I $,
+  \item for any two distinct lines $ l_1, l_2 \in L $, there is a unique point $ p \in P $, such that $ (p, l_1), (p, l_2) \in I $, and
+  \item there are four distinct points in $ P $ such that no line in $ L $ is incident with more than two of them.
+\end{enumerate}
+\end{definition}
+$ \P $ is said to be \textbf{finite} if the number of points in $ P $ is finite, otherwise it is said to be \textbf{infinite}. Intuitively, incidence relates points and lines in a familiar fashion, such that "points being incident with lines" can be interpreted as "points lying on lines" or as "lines passing through points". As such:
+\begin{enumerate}[label=(P\arabic*)]
+  \item implies that a line can alternatively be defined as the unique edge joining any two points,
+  \item states that no lines are parallel to each other, and
+  \item rules out certain degenerate cases that are trivial or uninteresting.
+\end{enumerate}
+
+\pagebreak
+
+\begin{wrapfigure}{r}{0.3\textwidth}
+\includegraphics[width=0.3\textwidth]{figures/degenerate.jpg}
+Families of degenerate planes
+\end{wrapfigure}
+
+These degenerate cases include two general families of degenerate planes as in \cite{degenerate}:
+\begin{enumerate}
+  \item all projective planes $ \P \equiv (P, L, I) $ with:
+    \begin{enumerate}
+      \item $ P \equiv \{ p_1, ..., p_n \} $ for some $ n \in \N $,
+      \item $ L \equiv \{ l_1, ..., l_m \} $ for some $ m \in \N $,
+      \item $ I \equiv \{ (p_i, l_1) \mid i \in \{ 1 ... n \} \} \cup \{ (p_1, l_i) \mid i \in \{ 2 ... m \} \} $, and
+    \end{enumerate}
+  \item all projective planes $ \P \equiv (P, L, I) $ with:
+    \begin{enumerate}
+      \item $ P \equiv \{ p_1, ..., p_n \} $ for some $ n \in \N $,
+      \item $ L \equiv \{ l_1, ..., l_n \} $ for the same $ n $,
+      \item $ I \equiv \{ (p_i, l_1) \mid i \in \{ 2 ... n \} \} \\ \cup \{ (p_1, l_i) \mid i \in \{ 2 ... n \} \} \cup \{ (p_i, l_i) \mid i \in \{ 2 ... n \} \} $.
+    \end{enumerate}
+\end{enumerate}
+They include trivial cases like empty points or empty lines, which do not have enough structure to be considered interesting. Although they are presented as finite cases, they can be naturally extended to infinite cases, and hence hold for infinite projective planes as well. For historical reasons, these are not considered projective planes in any discussion.
+
+For convenience, an abuse of notation will be used in the rest of the project. Let $ \P \equiv (P, L, I) $ be a projective plane. Then for any $ p, p' \in P $ and any $ l, l' \in L $:
+\begin{itemize}
+  \item $ P(l) \coloneqq \{ p \in P \mid (p, l) \in I \} $,
+  \item $ L(p) \coloneqq \{ l \in L \mid (p, l) \in I \} $,
+  \item $ l = p \cup p' \Leftrightarrow (p, l), (p', l) \in I $, and
+  \item $ p = l \cap l' \Leftrightarrow (p, l), (p, l') \in I $.
+\end{itemize}
+This allows for the three axioms to be redefined in a less cumbersome manner.
+
+\section{Properties}
+
+For this section, let $ \P \equiv (P, L, I) $ be a finite projective plane, unless otherwise stated.
+
+\subsection{Duality}
+
+At first glance, it stands out that there is an inherent symmetry to the roles of points and lines in projective planes. In fact, exchanging their roles will still yield a valid definition of projective planes. This crucial notion is known as \textbf{duality}, as illustrated in the theorem below.
+
+\begin{theorem}[Principle of plane duality]
+\label{thm:duality}
+Let $ S $ be a statement of projective planes directly proven from the three axioms P1, P2, and P3. Let $ S' $ be the statement derived directly from $ S $ by exchanging every instance of "point" with "line" and vice versa. Then $ S' $, called the \textbf{dual statement} to $ S $, is still a valid statement of projective planes.
+\end{theorem}
+
+However, axiom P3 presents a tiny subtlety, which needs to be justified in the following lemma.
+
+\begin{lemma}
+\label{lemma:quadilateral}
+There are four distinct lines in $ L $ such that no point in $ P $ is incident with more than two of them.
+\end{lemma}
+
+\begin{proof}
+Axiom P3 gives four distinct points $ p_1, ..., p_4 \in P $, such that no line in $ L $ is incident with more than two of them. Set the distinct lines as $ l_1 = p_1 \cup p_2 $, $ l_2 = p_2 \cup p_3 $, $ l_3 = p_3 \cup p_4 $, and $ l_4 = p_4 \cup p_1 $. Clearly all points are incident with exactly two of these lines. Axiom P2 gives two additional distinct points $ p_5 = l_1 \cap l_3 $ and $ p_6 = l_2 \cap l_4 $. Clearly they are also incident with exactly two of these lines. Thus no points in $ P $ are incident with more than two of these four lines.
+\end{proof}
+
+The proof of the lemma introduces two fundamental substructures in any projective plane.
+
+\begin{definition}[Quadrangle]
+A \textbf{quadrangle} is any four distinct points in $ P $ that satisfies axiom P3.
+\end{definition}
+
+\begin{definition}[Quadilateral]
+A \textbf{quadilateral} is any four distinct lines in $ L $ that satisfies Lemma \ref{lemma:quadilateral}.
+\end{definition}
+
+The proof of the theorem is then trivial by the lemma.
+
+\begin{proof}[Proof (of Theorem \ref{thm:duality})]
+It is sufficient to show that the three axioms P1, P2, and P3 imply the three derived dual axioms Q1, Q2, and Q3. Clearly P1 and P2 are dual axioms, so Q1 $ \Leftrightarrow $ P2 and Q2 $ \Leftrightarrow $ P1. Lemma \ref{lemma:quadilateral} shows that Q3 can be derived from P1, P2, and P3.
+\end{proof}
+
+Applying this exchange to a particular finite projective plane will indeed result in a related valid finite projective plane, albeit labelled differently.
+
+\begin{definition}[Dual plane]
+The \textbf{dual plane} of $ \P $, derived directly from $ \P $ by exchanging every instance of "point" with "line" and vice versa, is a finite projective plane $ \P^D \coloneqq (L, P, I^*) $, where $ I^* = \{ (l, p) \mid (p, l) \in I \} \subseteq L \times P $ is the inverse relation of $ I $.
+\end{definition}
+
+This exchange will be named appropriately for the sake of brevity.
+
+\begin{definition}[Plane duality]
+A \textbf{plane duality} is a map transforming $ \P $ to its dual plane $ \P^D $.
+\end{definition}
+
+\subsection{Order}
+
+Now it is worth noting that the number of points and lines of any projective plane are restricted by a lower bound. This is a direct consequence of the previous section ruling out trivial cases.
+
+\begin{proposition}
+\label{prop:pointslines7}
+$ |P| \ge 7 $ and $ |L| \ge 7 $.
+\end{proposition}
+
+\begin{proof}
+Axiom P3 gives four points in the quadrangle, of which must be pairwise incident to a unique line by P2. A simple combinatorial argument gives $ |L| \ge \two{4}{2} = 6 $. Out of the $ \two{6}{2} = 15 $ pairs of these lines, three pairs are not yet incident to a unique point. Axiom P2 assigns three points to these, so with the initial four points, we have $ |P| \ge 4 + 3 = 7 $. A similar dual argument shows that $ |L| \ge 7 $ as well.
+\end{proof}
+
+The three points not in the initial quadrangle are given names for easy reference.
+
+\begin{definition}[Diagonal point]
+A \textbf{diagonal point} is any one of the three additional points in $ \P $ not in the quadrangle in Proposition \ref{prop:pointslines7}.
+\end{definition}
+
+It is entirely possible that the simplest finite projective plane has exactly 7 points and 7 lines, which will be explored in the next chapter. For now, it can be seen that points and lines are heavily related.
+
+\begin{proposition}
+\label{prop:order}
+There is a unique $ n \in \N_{\ge 2} $ such that:
+\begin{enumerate}[label=(\roman*)]
+  \item for any line $ l \in L $, we have $ |P(l)| = n + 1 $, and
+  \item for any point $ p \in P $, we have $ |L(p)| = n + 1 $.
+\end{enumerate}
+\end{proposition}
+
+Two lemmas will be introduced to prove this more succinctly.
+
+\begin{lemma}
+\label{lemma:pointslines3}
+Let $ p \in P $ be a point and $ l \in L $ be a line. Then:
+\begin{enumerate}
+  \item $ |P(l)| \ge 3 $, and
+  \item $ |L(p)| \ge 3 $.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Check both parts.
+\begin{enumerate}
+  \item Axiom P3 gives four points $ p_1, ..., p_4 \in P $ in the quadrangle. For any line $ l \in L $, assume without loss of generality that $ p_1, p_2 \notin P(l) $. Axiom P1 gives unique distinct lines $ l_1 = p_2 \cup p_3 $, $ l_2 = p_1 \cup p_3 $, and $ l_3 = p_1 \cup p_2 $. Axiom P2 gives three distinct unique points $ q_i = l \cap l_i $, so $ |P(l)| \ge 3 $.
+  \item A similar dual argument shows that $ |L(p)| \ge 3 $ for any point $ p \in P $ as well.
+\end{enumerate}
+\end{proof}
+
+\begin{lemma}
+\label{lemma:otherline}
+For any point $ p \in P $, there is a line $ l \in L $ such that $ p \notin P(l) $.
+\end{lemma}
+
+\begin{proof}
+Fix a point $ p \in P $. Lemma \ref{lemma:pointslines3} gives a line $ l \in L(p) $, a second distinct point $ p' \in P(l) $, and a second distinct line $ l' \in L(p') $. By axiom P2, since $ l $ is uniquely incident to $ p $ and $ p' $, it must be that $ p \notin P(l') $.
+\end{proof}
+
+The proof, albeit slightly longer, follows easily from the axioms and previous lemmas.
+
+\begin{proof}[Proof (of Proposition \ref{prop:order})]
+Proof adopted from \cite{geombook}.
+\begin{enumerate}[label=(\roman*)]
+  \item Fix two distinct lines $ l, l' \in L $, which is possible by Proposition \ref{prop:pointslines7}, which has a unique point $ p = l \cap l' $ by axiom P2. Lemma \ref{lemma:pointslines3} gives a third distinct line $ l'' \in L(p) $ and a second distinct point $ p' \in P(l'') $. Now assume $ P(l) = \{ p, q_1, ..., q_m \} $, which is possible by Lemma \ref{lemma:pointslines3}. Axiom P1 gives unique distinct lines $ m_i = p' \cup q_i $. Axiom P2 gives unique distinct points $ q'_i = l' \cap m_i $. Hence $ p, q'_1, ..., q'_m \in P(l') $, such that $ |P(l')| \ge m + 1 = |P(l)| $. Swapping the roles of $ l $ and $ l' $ shows that $ |P(l)| \ge m + 1 = |P(l')| $, so that $ |P(l)| = m + 1 = |P(l')| $. Now set $ n \coloneqq m $.
+  \item Fix a point $ p \in P $. By Lemma {lemma:otherline}, there is a line $ l \in L $ such that $ p \notin P(l) $. Now assume $ P(l) = \{ p_1, ..., p_{n + 1} \} $. Axiom P1 gives unique distinct lines $ l_i = p \cup p_i $, so $ |L(p)| \ge n + 1 $. $ \text{\Lightning} $ Suppose there is another distinct line $ l' \in L(p) $. Axiom P2 gives a unique distinct point $ p'' = l \cap l' $, so $ p'' \in P(l) $. $ \text{\Lightning} $ Thus indeed $ |L(p)| = n + 1 $.
+\end{enumerate}
+\end{proof}
+
+This strong relation between points and lines allows the order, the most important property of a finite projective plane, to be defined.
+
+\begin{definition}[Order]
+An \textbf{order} of a finite projective plane is the unique $ n \in \N_{\ge 2} $ satisfying Proposition \ref{prop:order}.
+\end{definition}
+
+A combinatorial argument arising from this yields the equivalence between the number of points and lines of any finite projective plane.
+
+\begin{corollary}
+\label{cor:ordernn1}
+Let $ \P $ be of order $ n $. Then $ |P| = |L| = n^2 + n + 1 $.
+\end{corollary}
+
+\begin{proof}
+Proof adopted from \cite{pointslines}. \\
+Assume $ \P $ has order $ n $, and fix a point $ p \in P $. Proposition \ref{prop:order} gives $ |L(p)| = n + 1 $, and $ |P(l)| = n + 1 $ for any line $ l \in L(p) $, so $ |P(l) \setminus \{ p \}| = n $. Since the points and lines are distinct, we have $ |P| \ge n (n + 1) + 1 = n^2 + n + 1 $. $ \text{\Lightning} $ Suppose there is another distinct point $ p' \in P $. Axiom P2 gives a unique distinct line $ l' = p \cup p' $, so $ l' \in L(p) $. $ \text{\Lightning} $ Thus indeed $ |P| = n^2 + n + 1 $. A similar dual argument shows that $ |L| = n^2 + n + 1 $ as well.
+\end{proof}
+
+\subsection{Isomorphism}
+
+With order being defined, it can be said that plane duality does preserve order. However, despite the similarity of roles between points and lines, it is not the case that plane duality necessarily preserves the structure of the plane. In other words, duality applies to the theory of projective planes but not the individual projective planes. As with any algebraic or geometric structure, it is useful to define a notion of isomorphism between projective planes for this purpose.
+
+\begin{definition}[Isomorphism]
+Let $ \P_1 \equiv (P_1, L_1, I_1) $ and $ \P_2 \equiv (P_2, L_2, I_2) $ be two projective planes. An \textbf{isomorphism} from $ \P_1 $ to $ \P_2 $ is an ordered pair of bijections $ (\pi, \lambda) $, where $ \pi : P_1 \to P_2 $ and $ \lambda : L_1 \to L_2 $, such that for all $ (p, l) \in I_1 $, we have $ (\pi(p), \lambda(l)) \in I_2 $. $ \P_1 $ is said to be \textbf{isomorphic} to $ \P_2 $, denoted by $ \P_1 \cong \P_2 $, if there exists an isomorphism from $ \P_1 $ to $ \P_2 $. Otherwise $ \P_1 $ is said to be \textbf{non-isomorphic} to $ \P_2 $, denoted by $ \P_1 \ncong \P_2 $.
+\end{definition}
+
+\begin{remark}
+The isomorphism relation $ \cong $ between finite projective planes is an equivalence relation. This is a trivial result from realising that the identity isomorphism imply reflexivity, inverse isomorphisms imply symmetry, and bijective composition of isomorphisms imply transitivity.
+\end{remark}
+
+Isomorphic finite projective planes are hence considered structurally equivalent and are virtually indistinguishable from each other. A common notion among isomorphisms is to consider the isomorphisms from a plane to itself.
+
+\begin{definition}[Automorphism]
+Let $ \P \equiv (P, L, I) $ be a finite projective plane. An \textbf{automorphism} $ \phi $ of $ \P $ is an isomorphism from $ \P $ to itself.
+\end{definition}
+
+The set of all automorphisms and their relation to each other also forms a group.
+
+\begin{definition}[Automorphism Group]
+Let $ \P $ be a finite projective plane. The \textbf{automorphism group} of $ \P $, denoted by $ Aut(\P) $, is a group $ (S (\P), \circ) $, where $ S (\P) $ is the set of all automorphisms of a projective plane $ \P $, and $ \circ $ is the composition operation between automorphisms.
+\end{definition}
+
+It is tempting to say that plane duality is isomorphism-invariant, but this is only restricted to a class of planes which have a certain property.
+
+\begin{definition}[Self-dual]
+Let $ \P^D $ be the dual plane of $ \P $. If $ \P \cong \P^D $, then $ \P $ is said to be \textbf{self-dual}.
+\end{definition}
+
+Most finite projective planes are not self-dual, but a class of planes known as Desarguesian planes are always self-dual, provided they are finite. Indeed, when considering the planes of order 9, there are exactly four non-isomorphic finite projective planes, of which two are self-dual and the other two being duals of each other. However, it is also a known fact that there is exactly one unique plane of, say, order 3, yet there are no planes of, say, order 6. The mere subtlety in the number of non-isomorphic finite projective planes of each order is interesting in its own way, that it has become a subject of great interest for mathematicians. Many results have been proved, including the fact that there must exist a plane for certain orders but not other orders. However, the classification of all finite projective planes is still far from complete. For instance, it still remains an open problem whether there exists a plane of order 12. All these facts will be heavily justified in the next few chapters.
+
+\chapter{Existence of planes of special orders}
+
+For this chapter, denote $ (x, y, z)^T $ as $ xyz $, for ease of notation.
+
+\section{The projective plane of order 2 (Fano plane)}
+
+Prior to this chapter, there has yet been a discussion or even an example of a particular finite projective plane, which might lead one to question if they truly exist, especially due to the unfamiliar axioms proposed. This chapter assures the existence of these planes implicitly by providing proofs.
+
+\subsection{Construction}
+
+Due to Proposition \ref{prop:pointslines7}, if a finite projective plane exists, it must have at least seven points and seven lines. With the properties of order in Proposition \ref{cor:ordernn1}, it is clear that a plane of order 1, which would theoretically have three points and three lines, cannot possibly exist. Hence the smallest plane would need to be of order at least 2, which would have exactly seven points and seven lines. 
+Indeed, \textbf{a plane of order 2 exists}, as illustrated in the following informal construction.
+
+\begin{example}
+Let $ \P \equiv (P, L, I) $ be labelled such that: $$ P \coloneqq \{ p_{001}, p_{010}, p_{011}, p_{100}, p_{101}, p_{110}, p_{111} \}, $$ $$ L \coloneqq \{ l_{001}, l_{010}, l_{011}, l_{100}, l_{101}, l_{110}, l_{111} \}, $$ and the incidence relation as
+\begin{align*}
+I \coloneqq \{
+& (p_{001}, l_{010}), (p_{001}, l_{100}), (p_{001}, l_{110}), \\
+& (p_{010}, l_{001}), (p_{010}, l_{100}), (p_{010}, l_{101}), \\
+& (p_{011}, l_{011}), (p_{011}, l_{100}), (p_{011}, l_{111}), \\
+& (p_{100}, l_{001}), (p_{100}, l_{010}), (p_{100}, l_{011}), \\
+& (p_{101}, l_{010}), (p_{101}, l_{101}), (p_{101}, l_{111}), \\
+& (p_{110}, l_{001}), (p_{110}, l_{110}), (p_{110}, l_{111}), \\
+& (p_{111}, l_{011}), (p_{111}, l_{101}), (p_{111}, l_{110}) \},
+\end{align*}
+as seen in the diagram below. A simple verification shows that this is indeed a projective plane. It is labelled in this fashion using binary representations of $ 1, ..., 7 $ for many pedantic reasons. They will be made clear over later sections and chapters, which will periodically refer back to this explicit construction as an example.
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/fano_plane.jpg} \\
+Projective plane of order 2
+\end{center}
+\end{example}
+
+This notation, despite being very explicit, is clearly extremely cumbersome, especially if used on finite projective planes of higher orders, if they exist. An alternative algebraic construction representing the same plane would be useful, and would possibly generalise better. The following proposition presents exactly this and a proof that it is indeed a finite projective plane.
+
+\begin{proposition}
+\label{prop:order2}
+Let $ V $ be a three-dimensional vector space over the finite field $ \F_2 $, and let:
+\begin{enumerate}
+  \item $ P \coloneqq \{ p_n \mid n \in V \} $,
+  \item $ L \coloneqq \{ l_m \mid m \in V \} $, and
+  \item $ I \coloneqq \{ (p_n, l_m) \mid p_n \in P, l_m \in L, \langle n, m \rangle = 0 \} $.
+\end{enumerate}
+Then $ \P \coloneqq (P, L, I) $ is a finite projective plane of order 2 as constructed above.
+\end{proposition}
+
+\begin{proof}
+It is sufficient to check the three axioms of projective planes.
+\begin{enumerate}
+  \item For any two distinct points $ p_n, p_m \in P $, the line $ l_{n + m} = p_n \cup p_m $ is unique.
+  \item For any two distinct lines $ l_n, l_m \in L $, the point $ p_{n + m} = l_n \cap l_m $ is unique.
+  \item The four distinct points $ p_{001}, p_{010}, p_{100}, p_{111} \in P $ are such that no line in $ L $ is incident with more than two of them.
+\end{enumerate}
+A simple verification shows that the above indeed holds for all points and lines.
+\end{proof}
+
+\subsection{Uniqueness}
+
+An informal way of constructing a finite projective plane of order 2 could be to argue axiomatically as in \cite{geombook}. Restricted by a lower bound of seven points and seven lines, a diagram of a plane equivalent to the plane constructed above will be drawn inevitably. This suggests that it the plane in question may be unique up to isomorphism and order, as illustrated in the following proposition.
+
+\begin{proposition}
+Let $ \P $ and $ \P' $ be two finite projective planes of order $ 2 $. Then $ \P \cong \P' $.
+\end{proposition}
+
+\begin{proof}
+It is sufficient to show that there is an isomorphism from any finite projective plane $ \P \equiv (P, L, I) $ of order 2 to the plane $ \P' \equiv (P', L', I') $ constructed in Proposition \ref{prop:order2}. \\
+Corollary \ref{cor:ordernn1} gives $ |P| = |L| = 2^2 + 2 + 1 = 7 $, so let $ p_1, ..., p_7 \in P $ and $ l_1, ..., l_7 \in L $. Axiom P3 gives a quadrangle, which can be labelled as $ p_1, p_2, p_4, p_7 $. Proposition \ref{prop:pointslines7} gives six explicit lines, each unique to a pair of points in the quadrangle, which can be labelled as $ l_1 = p_2 \cup p_4 $, $ l_2 = p_1 \cup p_4 $, $ l_3 = p_4 \cup p_7 $, $ l_4 = p_1 \cup p_2 $, $ l_5 = p_2 \cup p_7 $, and $ l_6 = p_1 \cup p_7 $. There are also three additional diagonal points, which can be labelled as $ p_3 = l_3 \cap l_4 $, $ p_5 = l_2 \cap l_5 $, and $ p_6 = l_1 \cap l_6 $. By this labelling, Proposition \ref{prop:order} holds for all lines and all points in the quadrangle, but not for any diagonal point. It is easy to see that only $ (p_3, l_7), (p_5, l_7), (p_6, l_7) \in I $ will make Proposition \ref{prop:order} hold for diagonal points. \\
+Let $ V $ be the vector space over $ \F_2 $ representing $ \P' $. Now let $ \pi : P \to P' $ and $ \lambda : L \to L' $ be such that $ \pi(p_n) = p_{n'} $ and $ \lambda(l_m) = l_{m'} $, where $ n' $ and $ m' $ are the binary representations in $ V $ of $ n $ and $ m $ respectively, such that $ \beta(1) = 001 $, $ \beta(2) = 010 $, $ \beta(4) = 100 $, etc. Then $ \pi $ and $ \lambda $ are clear bijections. It is also simple to verify that indeed $ \langle p_{n'}, l_{m'} \rangle = 0 $ for all points $ p_n \in P $ and all lines $ l_m \in L $ such that $ (p_n, l_m) \in I $. Thus $ \phi \coloneqq (\pi, \lambda) $ is an isomorphism.
+\end{proof}
+
+Indeed, \textbf{the finite projective plane of order 2 is unique}. This particular plane is of such historical and mathematical importance that it was entitled a name after the Italian mathematician G Fano for his massive contributions to finite geometry.
+
+\begin{definition}[Fano plane]
+The \textbf{Fano plane} is the unique finite projective plane of order 2.
+\end{definition}
+
+The Fano plane is indeed the smallest non-trivial finite projective plane, having an automorphism group of 168 elements. This particular group is the projective special linear group $ PSL(2, 7) $, which is in fact the second smallest non-abelian finite simple group, only to be preceeded by the alternating group $ A_5 $.
+
+\section{Desarguesian planes of prime power order}
+
+As per the previous section, the plane of order 2 does indeed exist. In the previous chapter, albeit briefly as a remark, it was mentioned that the plane of order 3 exists, but a plane of order 6 does not. These curious facts suggest that there may be a pattern among "valid" orders, which is the case, as illustrated in the following theorem.
+
+\begin{theorem}
+\label{thm:primepower}
+Let $ n \in \N $ be a \textbf{prime power}, so that $ n = p^q $ for $ q \in \N $ and prime $ p \in \N $. Then there exists a finite projective plane of order $ n $.
+\end{theorem}
+
+\subsection{Skew-fields}
+
+The proof of this theorem relies on an alternate representation of a finite projective plane with algebraic methods. In particular, linear algebra in the form of modules, which are vector spaces generalised to arbitrary rings, over a field-like structure will be used in the construction of a projective plane. For this purpose, the ring structure required will be defined as follows.
+
+\begin{definition}[Skew-field]
+A \textbf{skew-field} is a ring $ (R, +, \cdot, 0, 1) $, where for all $ r \in R \setminus \{ 0 \} $, there is a unique $ s \in R \setminus \{ 0 \} $ such that $ r \cdot s = s \cdot r = 1 $.
+\end{definition}
+
+It is clear, both in definition and nomenclature, that all fields are skew-fields, and that skew-fields differ from fields only in that commutativity of the multiplication operation is not required. However, as the scope of discussion is limited to finite projective planes, only finite skew-fields will be considered, leading directly to the following well-known theorem.
+
+\begin{theorem}[Wedderburn's little theorem]
+\label{thm:wedderburn}
+Let $ F $ be a finite skew-field. Then $ F $ is a finite field.
+\end{theorem}
+
+\begin{proof}
+Omitted, see \cite{wedderburn}.
+\end{proof}
+
+This amazing result implies that modules over finite skew-fields are equivalent to vector spaces over finite fields, and that all properties of finite fields, such as necessarily having orders equal to prime powers, are inherited. As such, using the term "vector space over finite skew-field" is clear by context.
+
+\subsection{Homogeneous coordinates}
+
+The construction of the projective plane is then similar to Proposition \ref{prop:order2}, but it will be presented with the standard method of construction known as \textbf{homogeneous coordinates}. This is done by considering a three-dimensional vector space over a finite skew-field, then defining points as one-dimensional linear subspaces, lines as two-dimensional linear subspaces, and incidence as orthogonality. A more concrete statement is as follows.
+
+\begin{proposition}
+\label{prop:pfplane}
+Let $ V $ be a three-dimensional vector space over a finite skew-field $ F $, and let $ V^* \coloneqq V \setminus \{ 000 \} $ and $ F^* \coloneqq F \setminus \{ 0 \} $. For any $ v \in V^* $, let the equivalence class of all scalar multiples be $ [v] \coloneqq \{ \lambda v \mid \lambda \in F^* \} $ and let the set of all equivalence classes be $ V^* / F^* \coloneqq \{ [v] | v \in V^* \} $. Now let:
+\begin{enumerate}
+  \item $ P \coloneqq \{ p_{[v]} \mid [v] \in V^* / F^* \} $,
+  \item $ L \coloneqq \{ l_{[v]} \mid [v] \in V^* / F^* \} $, and
+  \item $ I \coloneqq \{ (p_{[n]}, l_{[m]}) \mid p_{[n]} \in P, l_{[m]} \in L, \langle n, m \rangle = 0 \} $.
+\end{enumerate}
+Then $ \P(F) \coloneqq (P, L, I) $ is a finite projective plane, \textbf{coordinatised} by $ V $ and $ F $.
+\end{proposition}
+
+\begin{remark}
+It is clear that points in $ P $ are indeed one-dimensional linear subspaces. Lines in $ L $ are also two-dimensional linear subspaces, as each two-dimensional subspace can be uniquely represented by its normal line.
+\end{remark}
+
+\begin{proof}
+Proof adopted from \cite{geombook}. \\
+Let $ V $ be a vector space over a finite skew-field $ F $. Theorem \ref{thm:wedderburn} says that $ V $ is a vector space over a finite field $ F $. Again, the three axioms of projective planes will be checked.
+\begin{enumerate}
+  \item For any two distinct points $ p_{[n]}, p_{[m]} \in P $, we have that $ n $ and $ m $ are distinct up to scalar multiples, so that $ rank (n, m) = 2 $. Then if $ n \equiv n_1 n_2 n_3 $ and $ m \equiv m_1 m_2 m_3 $, there is a unique $ v \coloneqq v_1 v_2 v_3 \in V^* $ such that for all $ \lambda \in F^* $, $$ \two{n_1 & n_2 & n_3}{m_1 & m_2 & m_3} \left( \lambda \begin{pmatrix} v_1 \\ v_2 \\ v_3 \end{pmatrix} \right) = \two{0}{0} $$. Thus $ [v] \coloneqq \{ \lambda v \mid \lambda \in F^* \} $ is the unique equivalence class for the line $ l_{[v]} = p_{[n]} \cup p_{[m]} $.
+  \item For any two distinct lines $ l_{[n]}, l_{[m]} \in L $, it can be shown similarly that there is a unique $ v \in V^* $ such that $ [v] = \{ \lambda v \mid \lambda \in F^* \} $ is the unique equivalence class for the point $ p_{[v]} = l_{[n]} \cap l_{[m]} $.
+  \item Since $ 0, 1 \in F $, we have $ 001, 010, 100, 111 \in V^* $. Then the four distinct points $ p_{[001]}, p_{[010]}, p_{[100]}, p_{[111]} \in P $ are such that no line in $ L $ is incident with more than two of them.
+\end{enumerate}
+\end{proof}
+
+The construction of the Fano plane can now be restated as in the following example.
+
+\begin{example}
+Let $ V $ be a three-dimensional vector space over the finite skew-field $ \F_2 \equiv \{ 0, 1 \} $, and let $ P $, $ L $, and $ I $ be as in Proposition \ref{prop:pfplane}. Then $ \P \equiv (P, L, I) $ is the Fano plane.
+\end{example}
+
+With this identification, it is then trivial to prove Theorem \ref{thm:primepower}.
+
+\begin{proof}[Proof (of Theorem \ref{thm:primepower})]
+Theorem \ref{thm:wedderburn} says that $ V $ is a vector space over the finite field $ F $. Then $ |F| = n $, where $ n $ is a prime power. By Proposition \ref{prop:pfplane}, this coordinatises a finite projective plane $ \P(F) \equiv (P, L, I) $. Now fix a two-dimensional vector subspace $ W \subset V $, defined to be a line $ l \in L $. A simple combinatorial argument gives $ |W| = n^2 $, such that there are $ n^2 - 1 $ distinct one-dimensional non-zero vectors. There are also $ n - 1 $ distinct bases for one-dimensional vector subspaces $ U \subset W $. Thus, there are $ \frac{n^2 - 1}{n - 1} = n + 1 $ distinct one-dimensional vector subspaces $ U $, defined to be points $ p \in P $, such that $ |P(l)| = n + 1 $. Thus the definition of order defined in Proposition \ref{prop:order} says $ \P(F) $ has order $ n $.
+\end{proof}
+
+Indeed, for every prime power, there is a finite projective plane of that order, which immediately establishes the existence of countably infinite planes.
+
+\begin{remark}
+For an explicit list of "valid" orders less than a fixed small order, an easy way is to simply loop across primes and exponentiate them with natural numbers, leading to the sequence A246655 on the Online Encyclopaedia of Integer Sequences (OEIS) \cite{A246655} (2, 3, 4, 5, 7, 8, 9, 11, 13, ...). Note that 6, 10, and 12 are missing from this list for reasons that will be discussed in the next chapter. All known finite projective planes have orders in this list, and it is currently an open problem if there exists a finite projective plane of order not in this list.
+\end{remark}
+
+The class of all projective planes constructed by this method was named after the French mathematician G Desargues, one of the founders of projective geometry.
+
+\begin{definition}[Desarguesian plane]
+A finite \textbf{Desarguesian plane} of order $ n $ is a finite projective plane of order $ n $ constructed as in Proposition \ref{prop:pfplane}. If a finite projective plane cannot be constructed as in Proposition \ref{prop:pfplane}, it is said to be \textbf{non-Desarguesian}.
+\end{definition}
+
+\begin{remark}
+It is easy to see that any Desarguesian plane is self-dual due to its inherent symmetry.
+\end{remark}
+
+As a side note, infinite Desarguesian planes can be naturally extended by considering infinite skew-fields rather than finite ones. In this case, vector spatial properties are not inherited, as infinite skew-fields are not necessarily fields by Theorem \ref{thm:wedderburn}. However, attempting to consider vector spaces over fields directly in the construction leads to another class of projective planes, named after Pappus of Alexandria, as follows.
+
+\begin{definition}[Pappian plane]
+A \textbf{Pappian plane}, also known as a \textbf{field plane}, is a Desarguesian plane constructed over fields rather than skew-fields. A finite Pappian plane is also called a \textbf{Galois plane}.
+\end{definition}
+
+All finite Pappian planes are clearly Desarguesian planes and vice versa, but infinite Desarguesian planes constructed over certain infinite skew-fields, such as the quaternions, are not Pappian planes.
+
+\begin{remark}
+Most textbooks define Desarguesian planes and Pappian planes as projective planes that satisfy \textbf{Desargues's theorem} and \textbf{Pappus's theorem} respectively, then deriving an equivalence with these methods of construction afterwards.
+\end{remark}
+
+\subsection{Other Desarguesian planes}
+
+As mentioned above every finite projective plane of order 2 is isomorphic to the Fano plane, but this does not hold in general. In other words, for a given prime power order, there may be other planes that are non-isomorphic to their corresponding Desarguesian plane. This was highlighted briefly in the previous chapter in the case of order 9, which is indeed the lowest order for a non-Desarguesian plane. In fact, \textbf{each of the planes of order 3, 4, 5, 7, and 8 is unique up to isomorphism}. The unique planes of order 3 and 4 are illustrated below.
+
+\begin{minipage}{0.5\textwidth}
+\begin{center}
+\includegraphics[width=0.6\textwidth]{figures/order_3.jpg} \\
+Projective plane of order 3
+\end{center}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{figures/order_4.jpg} \\
+Projective plane of order 4
+\end{center}
+\end{minipage}
+
+The proofs for each of these are lengthy and not generalised easily, and as such will be omitted for the sake of further discussion. As the order of a finite projective plane increases, the current approach makes it clear that the complexity of the proof of its uniqueness increases rapidly. For instance, the plane of order 8 was proven to be unique in \cite{order8}, after checking over a hundred cases of structures by hand. At the present, is still unknown if finite projective planes of a general valid order higher than 9, such as order 11, is unique.
+
+\section{Incidences of planes of small orders}
+
+As demonstrated in previous sections, a linear algebraic construction of finite projective planes is sufficient to imply their existence. However, this method of construction is not easily visualised due to the definition of incidence, so a semi-pictorial approach is taken to increase geometrical intuition.
+
+\subsection{Examples}
+
+An incidence matrix, defined below, is an explicit representation of a finite projective plane.
+
+\begin{definition}[Incidence matrix]
+An \textbf{incidence matrix} of a finite projective plane $ \P \equiv (P, L, I) $ of order $ n $, with $ m \coloneqq |P| = |L| = n^2 + n + 1 $, where $ P \equiv \{ p_1, ..., p_m \} $ and $ L \equiv \{ l_1, ..., l_m \} $, is a square matrix $ A \in \F_2^{m \times m} $, such that for all $ i, j \in \{ 1, ..., m \} $: $$ A_{ij} = \begin{cases} 1 & (p_i, l_j) \in I \\ 0 & (p_i, l_j) \notin I \end{cases}. $$
+\end{definition}
+
+For the rest of this section, let $ \P $ be a finite projective plane of order $ n $ with $ m \coloneqq n^2 + n + 1 $, and let $ A \in \F_2^{m \times m} $ be an incidence matrix of $ \P $.
+
+Incidence matrices provide an explicit but exact way of describing the incidence relation of a finite projective plane, so as to be reproduced easily. The following example constructs the incidence matrix for the Fano plane constructed in Proposition \ref{prop:order2}.
+
+\begin{example}
+$ A \in \F_2^{7 \times 7} $ \\
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+& $ p_{001} $ & $ p_{010} $ & $ p_{011} $ & $ p_{100} $ & $ p_{101} $ & $ p_{110} $ & $ p_{111} $ \\
+\hline
+$ l_{001} $ & 0 & 1 & 0 & 1 & 0 & 1 & 0 \\
+\hline
+$ l_{010} $ & 1 & 0 & 0 & 1 & 1 & 0 & 0 \\
+\hline
+$ l_{011} $ & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\
+\hline
+$ l_{100} $ & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\
+\hline
+$ l_{101} $ & 0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+\hline
+$ l_{110} $ & 1 & 0 & 0 & 0 & 0 & 1 & 1 \\
+\hline
+$ l_{111} $ & 0 & 0 & 1 & 0 & 1 & 1 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+\end{example}
+
+It is also immediately obvious that incidence matrices are not unique in the sense that the points and lines are arbitrarily labelled. There are several canonical forms of these matrices for Desarguesian planes, such as the Paige-Wexler normal form in \cite{paigewexler}, constructed by L J Paige and C Wexler. The following example constructs this canonical form for the unique finite projective plane of order 3, labelling the points as $ p_1, ..., p_{13} $ and the lines as $ l_1, ..., l_{13} $.
+
+\begin{example}
+$ A \in \F_2^{13 \times 13} $ \\
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+& $ l_1 $ & $ l_2 $ & $ l_3 $ & $ l_4 $ & $ l_5 $ & $ l_6 $ & $ l_7 $ & $ l_8 $ & $ l_9 $ & $ l_{10} $ & $ l_{11} $ & $ l_{12} $ & $ l_{13} $ \\
+\hline
+$ p_1 $ & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\hline
+$ p_2 $ & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+\hline
+$ p_3 $ & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\
+\hline
+$ p_4 $ & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 \\
+\hline
+$ p_5 $ & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\
+\hline
+$ p_6 $ & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
+\hline
+$ p_7 $ & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
+\hline
+$ p_8 $ & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\
+\hline
+$ p_9 $ & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\
+\hline
+$ p_{10} $ & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 0 \\
+\hline
+$ p_{11} $ & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 \\
+\hline
+$ p_{12} $ & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+\hline
+$ p_{13} $ & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+\end{example}
+
+Incidence matrices of finite projective planes of higher orders will not be explicitly shown due to their size, but their constructions are simple routines provided their incidence relation sets are fully known.
+
+\subsection{Properties}
+
+Now incidence matrices are clearly not symmetric, but they do have interesting properties worth investigating. Several propositions will be presented for this, as follows.
+
+\begin{proposition}
+\label{prop:dotproduct}
+For any row $ A_i $ and any column $ A_j $ in $ A $: $$ \langle A_i, A_j \rangle = \begin{cases} n + 1 & i = j \\ 1 & i \ne j \end{cases}. $$
+\end{proposition}
+
+\begin{proof}
+If $ i \ne j $, since two lines are incident with a unique point, there is only one unique $ 1 \le k \le m $, such that $ A_{ik} = A_{jk} = 1 $, thus $ \langle A_i, A_j \rangle = 1 $. Otherwise if $ i = j $, since $ |P(l)| = n + 1 $, there are distinct $ 1 \le k_1, ..., k_{n + 1} \le m $, such that $ A_{ik} = A_{jk} = 1 $, thus $ \langle A_i, A_j \rangle = n + 1 $.
+\end{proof}
+
+\begin{proposition}
+\label{prop:aanij}
+It holds that $ AA^T = nI_m + J_m $, where $ I_m \in \F_2^{m \times m} $ is the identity matrix and $ J_m \in \F_2^{m \times m} $ is the matrix with entries all 1.
+\end{proposition}
+
+\begin{proof}
+Clearly $ [AA^T]_{ij} = \langle A_i, A_j \rangle $, which is given by Proposition \ref{prop:dotproduct} as: $$ [AA^T]_{ij} = \begin{cases} n + 1 & i = j \\ 1 & i \ne j \end{cases}. $$ This is exactly $ AA^T = nI_m + J_m $ as required.
+\end{proof}
+
+\begin{proposition}
+The determinant $ det(A) = \pm (n + 1) n^{\frac{n^2 + n}{2}} $.
+\end{proposition}
+
+\begin{proof}
+Proof adopted from \cite{kahrstrom}. \\
+By properties of determinants, we have $ det(AA^T) = det(A)det(A^T) = det(A)^2 \ge 0 $. As adding scalar multiples of rows to rows and columns to columns preserve the absolute value of the determinant, subtracting the first row from all other rows and then adding all other columns to the first column gives, by Proposition \ref{prop:aanij}: $$ \left| det(AA^T) \right| = \begin{vmatrix} n + 1 & 1 & \dots & 1 & 1 \\ 1 & n + 1 & \dots & 1 & 1 \\ \vdots & \vdots & \ddots & \vdots & \vdots \\ 1 & 1 & \dots & n + 1 & 1 \\ 1 & 1 & \dots & 1 & n + 1 \end{vmatrix} = \begin{vmatrix} n + 1 & 1 & \dots & 1 & 1 \\ -n & n & \dots & 0 & 0 \\ \vdots & \vdots & \ddots & \vdots & \vdots \\ -n & 0 & \dots & n & 0 \\ -n & 0 & \dots & 0 & n \end{vmatrix} = \begin{vmatrix} (n + 1)^2 & 1 & \dots & 1 & 1 \\ 0 & n & \dots & 0 & 0 \\ \vdots & \vdots & \ddots & \vdots & \vdots \\ 0 & 0 & \dots & n & 0 \\ 0 & 0 & \dots & 0 & n \end{vmatrix}. $$ This is upper diagonal with all diagonal elements positive, hence giving $ det(AA^T) = (n + 1)^2 n^{n^2 + n} $. Thus $ det(A) = \pm (n + 1) n^{\frac{n^2 + n}{2}} $.
+\end{proof}
+
+These properties can easily be verified for the two examples given above.
+
+\chapter{Non-existence of planes of certain orders}
+
+The previous chapter has made it clear that finite projective planes do actually exist, and that there is an entire class of countably infinite planes. Again, one might suspect, based on this fact and the lack of proof for "invalid" orders, that there are planes of any order. This chapter attempts to prove that there are certain orders for which, if a plane should exist, it would lead to a contradiction, and hence cannot possibly exist.
+
+\section{Ruling out planes of invalid orders}
+
+As a start, \textbf{a plane of order 6 does not exist}. This has been historically proven in several ways, such as being an indirect result stemming from the separate work of G Tarry in \cite{tarry} and R C Bose in \cite{bose}. The slick method discussed here will be through the Bruck-Ryser theorem for projective planes, which in turn generalises another class of orders for which planes cannot exist. This theorem, proven earlier as a special case of the more general Bruck-Ryser-Chowla theorem in combinatorics named after R H Bruck, H J Ryser, and S D S Chowla, is illustrated as follows.
+
+\begin{theorem}[Bruck-Ryser theorem]
+\label{thm:bruckryser}
+Let $ n \in \N $ be such that:
+\begin{enumerate}
+  \item $ n \equiv 1 $ mod $ 4 $ or $ n \equiv 2 $ mod $ 4 $, and
+  \item there are no $ a, b \in \N $ such that $ n = a^2 + b^2 $.
+\end{enumerate}
+Then there are no finite projective planes of order $ n $.
+\end{theorem}
+
+\subsection{Lagrange's four square theorem}
+
+The theorem hinges on several fundamental ideas in number theory, which will be formulated in this section. The first of which is Lagrange's four square theorem, stated as follows.
+
+\begin{theorem}[Lagrange's four square theorem]
+\label{thm:lagrangefoursquare}
+Let $ n \in \N $. Then there are $ a, b, c, d \in \N $ such that $ n = a^2 + b^2 + c^2 + d^2 $, called a \textbf{sum of four squares}.
+\end{theorem}
+
+The proof of this theorem requires several elementary but important lemmas introduced below.
+
+\begin{lemma}[Euler's four square identity]
+\label{lemma:eulerfoursquare}
+Let $ a_1, a_2, a_3, a_4, b_1, b_2, b_3, b_4 \in \Z $. Then:
+\begin{align*}
+(a_1^2 + a_2^2 + a_3^2 + a_4^2) (b_1^2 + b_2^2 + b_3^2 + b_4^2)
+= & \quad (a_1 b_1 - a_2 b_2 - a_3 b_3 - a_4 b_4)^2 \\
+& + (a_1 b_2 + a_2 b_1 + a_3 b_4 - a_4 b_3)^2 \\
+& + (a_1 b_3 - a_2 b_4 + a_3 b_1 + a_4 b_2)^2 \\
+& + (a_1 b_4 + a_2 b_3 - a_3 b_2 + a_4 b_1)^2.
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+Indeed:
+\begin{align*}
+RHS
+= & \quad (a_1 b_1 - a_2 b_2 - a_3 b_3 - a_4 b_4)^2 \\
+& + (a_1 b_2 + a_2 b_1 + a_3 b_4 - a_4 b_3)^2 \\
+& + (a_1 b_3 - a_2 b_4 + a_3 b_1 + a_4 b_2)^2 \\
+& + (a_1 b_4 + a_2 b_3 - a_3 b_2 + a_4 b_1)^2 \\
+= & \quad a_1^2 b_1^2 + a_2^2 b_2^2 + a_3^2 b_3^2 + a_4^2 b_4^2 \\
+& + a_1^2 b_2^2 + a_2^2 b_1^2 + a_3^2 b_4^2 + a_4^2 b_3^2 \\
+& + a_1^2 b_3^2 + a_2^2 b_4^2 + a_3^2 b_1^2 + a_4^2 b_2^2 \\
+& + a_1^2 b_4^2 + a_2^2 b_3^2 + a_3^2 b_2^2 + a_4^2 b_1^2 \\
+= & \quad (a_1^2 + a_2^2 + a_3^2 + a_4^2) (b_1^2 + b_2^2 + b_3^2 + b_4^2) \\
+= & \quad LHS.
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+\label{lemma:evensum}
+Let $ n \in \N $ be even. Then $ \frac{n}{2} $ is a sum of four squares.
+\end{lemma}
+
+\begin{proof}
+Fix an even $ n \in \N $. Theorem 3.1.2 gives that $ n = a^2 + b^2 + c^2 + d^2 $ for some $ a, b, c, d \in \N $. Since n is even, an even number of $ \{ a, b, c, d \} $ is odd, so assuming without loss of generality that $ a $ and $ b $ have the same parity and $ c $ and $ d $ have the same parity gives $ \frac{a \pm b}{2}, \frac{c \pm d}{2} \in \N $. Thus: $$ \frac{n}{2} = \frac{a^2}{2} + \frac{b^2}{2} + \frac{c^2}{2} + \frac{d^2}{2} = \left( \frac{a + b}{2} \right)^2 + \left( \frac{a - b}{2} \right)^2 + \left( \frac{c + d}{2} \right)^2 + \left( \frac{c - d}{2} \right)^2. $$
+\end{proof}
+
+\begin{lemma}
+\label{lemma:oddprime}
+Let $ p \in \N $ be an odd prime. Then there are $ a, b, c, d, m \in \N $ such that: $$ 0 < a^2 + b^2 + c^2 + d^2 = mp < \frac{p^2}{2} < p^2. $$
+\end{lemma}
+
+\begin{proof}
+Fix an odd prime $ p \in \N $ and $ S \coloneqq \{ n^2 \mid n \in \N, 0 \le n < \frac{p - 1}{2} \} $. $ \text{\Lightning} $ Suppose for two distinct $ a^2, b^2 \in S $, we have $ a^2 \equiv b^2 $ mod $ p $, then either $ a \equiv b $ mod $ p $ or $ a \equiv -b $ mod $ p $. $ \text{\Lightning} $ Thus elements in $ S $ are pairwise non-congruent modulo $ p $, which by the Pigeonhole principle gives $ u^2, v^2 \in S $ such that $ u^2 \equiv -v^2 - 1 $ modulo $ p $. Then there is a $ m \in \N $ such that $ u^2 = -v^2 - 1 + mp $, so $ 0 < u^2 + v^2 + 1^2 + 0^2 = mp $. Since $ u^2, v^2 \le \left( \frac{p - 1}{2} \right)^2 $, we also have $ u^2 + v^2 + 1^2 \le 1 + 2 \left( \frac{p - 1}{2} \right)^2 = \frac{p^2 - 2p + 3}{2} < \frac{p^2}{2} < p^2 $.
+\end{proof}
+
+The theorem can then be proven as follows.
+
+\begin{proof}[Proof (of Theorem \ref{thm:lagrangefoursquare})]
+Proof adopted from \cite{lagrange}. \\
+Fix $ n \in \N $. \\
+By the Fundamental Theorem of Arithmetic, if $ n $ is not prime, there are primes $ p_1, ..., p_k \in \N $ such that $ n = p_1 ... p_k $. If any two $ a, b \in \N $ are both sums of four squares, then $ ab $ is also a sum of four squares by Lemma \ref{lemma:eulerfoursquare}. Thus by induction, if all primes $ p_i $ are sums of four squares, then $ n $ is also a sum of four squares. Since $ 2 = 1^2 + 1^2 + 0^2 + 0^2 $, we have that $ 2^q $ is also a sum of four squares for any $ q \in \N $. Thus it is sufficient to consider when $ n $ is an odd prime. \\
+Lemma \ref{lemma:oddprime} gives $ a, b, c, d, m \in \N $ such that $ 0 < m < n $ and $ mn = a^2 + b^2 + c^2 + d^2 $. Assume that $ m $ is minimal. Now suppose for a contradiction that $ m \ne 1 $. \\
+$ \text{\Lightning} $ Suppose also that $ m $ is even, then Lemma \ref{lemma:evensum} shows that it is is not minimal. $ \text{\Lightning} $ $ \text{\Lightning} $ Suppose instead that $ m $ divides all of $ a, b, c, d $, then $ m^2 $ divides $ a^2 + b^2 + c^2 + d^2 = mn $, so $ m \mid n $, which contradicts $ 0 < m < n $ since $ n $ is prime. $ \text{\Lightning} $ Thus $ m $ is odd and does not divide all of $ a, b, c, d $. \\
+Since $ \frac{m - 1}{2}, ..., \frac{m + 1}{2} $ is a full set of residues, there are $ w, x, y, z \in \Z $ such that:
+\begin{align*}
+w \equiv a \quad \text{mod} \ m, & \qquad w^2 \le \left( \frac{m - 1}{2} \right)^2, \\
+x \equiv b \quad \text{mod} \ m, & \qquad x^2 \le \left( \frac{m - 1}{2} \right)^2, \\
+y \equiv c \quad \text{mod} \ m, & \qquad y^2 \le \left( \frac{m - 1}{2} \right)^2, \quad and \\
+z \equiv d \quad \text{mod} \ m, & \qquad z^2 \le \left( \frac{m - 1}{2} \right)^2.
+\end{align*} \\
+Then $ w^2 + x^2 + y^2 + z^2 \equiv 0 $ mod $ m $ and $ w^2 + x^2 + y^2 + z^2 < 4 \left( \frac{m}{2} \right)^2 = m^2 < p^2 $. Hence there is a $ n \in \N $ such that $ 0 < l < m < n $ and $ w^2 + x^2 + y^2 + z^2 = lm $. Multiplying with $ a^2 + b^2 + c^2 + d^2 = mn $ gives $$ (aw - bx - cy - dz)^2 + (ax + bw + cz - dy)^2 + (ay - bz + cw + dx)^2 + (az + by - cx + dw)^2 = lm^2 n. $$ This is $ 0 $ modulo $ m^2 $, so dividing by $ m^2 $ makes $ ln $ a sum of four squares, contradicting the minimality of $ m \ne 1 $. Thus $ m = 1 $, so $ n = a^2 + b^2 + c^2 + d^2 $.
+\end{proof}
+
+In addition to the theorem, it is worth noting that Lemma \ref{lemma:eulerfoursquare} can be written in a more succinct manner with a matrix, which has an important property.
+
+\begin{proposition}
+\label{prop:foursquarematrix}
+Let $ a_1, a_2, a_3, a_4, b_1, b_2, b_3, b_4, c_1, c_2, c_3, c_4 \in \Z $ be such that: $$ (a_1^2 + a_2^2 + a_3^2 + a_4^2) (b_1^2 + b_2^2 + b_3^2 + b_4^2) = c_1^2 + c_2^2 + c_3^2 + c_4^2. $$ Let $ B \in \Z^{4 \times 4} $ be a matrix where: $$ B = \begin{pmatrix} b_1 & b_2 & b_3 & b_4 \\ -b_2 & b_1 & -b_4 & b_3 \\ -b_3 & b_4 & b_1 & -b_2 \\ -b_4 & -b_3 & b_2 & b_1 \end{pmatrix}. $$ Then $ (c_1, c_2, c_3, c_4) = (a_1, a_2, a_3, a_4) B $ and $ det(B) = 0 $ if and only if $ b_1 = b_2 = b_3 = b_4 = 0 $.
+\end{proposition}
+
+\begin{proof}
+It is easy to verify that indeed $ (c_1, c_2, c_3, c_4) = (a_1, a_2, a_3, a_4) B $ and $ det(B) = (a^2 + b^2 + c^2 + d^2)^2 $.
+\end{proof}
+
+\subsection{Sums of integral squares}
+
+The second being that any sum of two rational squares is a sum of two integral squares.
+
+\begin{proposition}
+\label{prop:rationalintegersquare}
+Let $ n \in \N $. If there are $ \frac{a}{c}, \frac{b}{c} \in \Q $ such that $ n = \left( \frac{a}{c} \right)^2 + \left( \frac{b}{c} \right)^2 $, then there are $ x, y \in \N $ such that $ n = x^2 + y^2 $.
+\end{proposition}
+
+Again, several lemmas will be introduced for this.
+
+\begin{lemma}
+\label{lemma:twosquareidentity}
+Let $ a_1, a_2, b_1, b_2 \in \Z $. Then: $$ \left( a_1^2 + a_2^2 \right) \left( b_1^2 + b_2^2 \right) = (a_1 b_1 - a_2 b_2)^2 + (a_1 b_2 + a_2 b_1)^2. $$
+\end{lemma}
+
+\begin{proof}
+Indeed: $$ \left( a_1^2 + a_2^2 \right) \left( b_1^2 + b_2^2 \right) = a_1^2 b_1^2 + a_2^2 b_2^2 + a_1^2 b_2^2 + a_2^2 b_1^2 = (a_1 b_1 - a_2 b_2)^2 + (a_1 b_2 + a_2 b_1)^2. $$
+\end{proof}
+
+\begin{lemma}
+\label{lemma:twosquaretheorem}
+Let $ p \in \N $ be an odd prime. If there are $ a, b \in \N $ such that $ a^2 + b^2 \equiv 0 $ mod $ p $, then $ p = a^2 + b^2 $.
+\end{lemma}
+
+\begin{proof}
+This is a similar but a simpler version of Theorem \ref{thm:lagrangefoursquare}. Fix an odd prime $ p \in \N $, and let $ a, b \in \N $ be such that $ a^2 + b^2 \equiv 0 $ mod $ p $, so $ a^2 + b^2 = np $ for some $ n \in \N $. \\
+Assume that $ n $ is minimal, and suppose for a contradiction that $ n \ne 1 $. Since the set of all integers in $ \left[ \frac{m - 1}{2}, \frac{m + 1}{2} \right] $ is a full set of residues, there are $ x, y \in \Z $ such that:
+\begin{align*}
+x \equiv a \quad \text{mod} \ n, & \qquad x^2 \le \left( \frac{n}{2} \right)^2, \quad and \\
+y \equiv -b \quad \text{mod} \ n, & \qquad y^2 \le \left( \frac{n}{2} \right)^2.
+\end{align*} \\
+Then $ x^2 + y^2 \equiv a^2 + b^2 \equiv 0 $ mod $ n $, so that there is a $ m \in \N $ such that $ x^2 + y^2 = nm $. It holds that: $$ m = \frac{x^2 + y^2}{n} \le \frac{\left( \frac{n}{2} \right)^2 + \left( \frac{n}{2} \right)^2}{n} = \frac{n}{2} < n. $$ \\
+By Lemma \ref{lemma:twosquareidentity} $ mn^2 p = (np) (nm) = (a^2 + b^2) (x^2 + y^2) = (ax + by)^2 + (ay + bx)^2 $, which is $ 0 $ modulo $ n^2 $. Thus dividing by $ n^2 $ makes $ mp $ a sum of two squares, contradicting the minimality of $ n \ne 1 $. Thus $ n = 1 $ and $ p = a^2 + b^2 $.
+\end{proof}
+
+The proposition can then be proven as follows.
+
+\begin{proof}[Proof (of Proposition \ref{prop:rationalintegersquare})]
+Proof adopted from \cite{kahrstrom}. \\
+Fix $ n \in \N $, such that $ n = \left( \frac{a}{c} \right)^2 + \left( \frac{b}{c} \right)^2 $ for some $ \frac{a}{c}, \frac{b}{c} \in \Q $, so $ a^2 + b^2 = nc^2 $. \\
+If $ a, b, c $ have common factors, then they can be cancelled out to give a similar equation $ a'^2 + b'^2 = nc'^2 $, so assume they are coprime. If $ n $ is not square-free, it can be written as $ n = mu^2 $ for some $ u \in \N $ and square-free $ m \in \N $, such that it can be merged to give a similar equation $ a^2 + b^2 = m (uc)^2 $, so assume $ n $ is square-free. By the Fundamental Theorem of Arithmetic, there are distinct primes $ p_1, ..., p_k \in \N $ such that $ n = p_1 ... p_k $. \\
+$ \text{\Lightning} $ Suppose that there is a prime $ p_i $ such that $ p_i \mid a $ and $ p_i \mid b $. Then either $ p_i^2 \mid n $, or $ p_i \mid c $. $ \text{\Lightning} $ Thus there is no such prime $ p_i $. \\
+Rewriting gives $ a^2 + b^2 = p_1 ... p_k c^2 $, so that $ a^2 + b^2 \equiv 0 $ mod $ p_i $ for all primes $ p_i $. Lemma \ref{lemma:twosquaretheorem} gives that each prime $ p_i = x_i^2 + y_i^2 $ for some $ x_i, y_i \in \N $, so that $ n = (x_1^2 + y_1^2) ... (x_k^2 + y_k^2) $. Thus by induction with Lemma \ref{lemma:twosquareidentity}, $ n $ is a sum of two squares.
+\end{proof}
+
+\begin{remark}
+Note that the above proposition holds for any two general rational numbers, since they can be rewritten such that their denominators are equal.
+\end{remark}
+
+\pagebreak
+
+\subsection{The Bruck-Ryser theorem}
+
+The previous lemmas allow the proof to be more conveniently presented.
+
+\begin{proof}[Proof (of Theorem \ref{thm:bruckryser})]
+Proof adopted from \cite{5} and \cite{kahrstrom}. \\
+Fix $ n \in \N $ such that $ n \equiv 1 $ mod $ 4 $ or $ n \equiv 2 $ mod $ 4 $. \\
+Let $ \P $ be a finite projective plane of order $ n $ with $ m \coloneqq n^2 + n + 1 $, and let $ A \in \F_2^{m \times m} $ be an incidence matrix of $ \P $. Now let $ x \coloneqq (x_1, ..., x_m) $ and $ x_{m + 1} $ be variables to be determined later, and $ z \equiv (z_1, ..., z_m) $ be such that $ z = xA $. Then each $ z_i $ is a linear combination of $ x_1, ..., x_m $, so $ z_i = \sum_{j = 1}^m a_{ij} x_j $ for some $ a_{ij} \in \Z $. \\
+By Proposition \ref{prop:aanij}: $$ zz^T = xA (xA)^T = x (AA^T) x^T = x (nI_m + J_m) x^T = nxx^T + xJ_m x^T. $$ \\
+Letting $ t \coloneqq \sum_{i = 1}^m x_i $, we have $ x J_m x^T = t^2 $, and so this can be rewritten as: $$ \sum_{i = 1}^m z_i^2 = n \sum_{i = 1}^m x_i^2 + x J_m x^T = n \sum_{i = 1}^m x_i^2 + t^2. $$ \\
+Since $ m + 1 = n^2 + n + 2 \equiv 0 $ mod $ 4 $, adding $ nx_{m + 1}^2 $ to both sides gives: $$ \sum_{i = 1}^m z_i^2 + nx_{m + 1}^2 = n \sum_{i = 1}^{m + 1} x_i^2 + t^2 = n \sum_{i = 1}^{\frac{m + 1}{4}} \left( x_i^2 + x_{i + 1}^2 + x_{i + 2}^2 + x_{i + 3}^2 \right) + t^2. $$ \\
+Theorem \ref{thm:lagrangefoursquare} gives $ n = a^2 + b^2 + c^2 + d^2 $ for some $ a, b, c, d \in \N $, so this can be rewritten as: $$ \sum_{i = 1}^m z_i^2 + nx_{m + 1}^2 = \sum_{i = 1}^{\frac{m + 1}{4}} \left( x_i^2 + x_{i + 1}^2 + x_{i + 2}^2 + x_{i + 3}^2 \right) (a^2 + b^2 + c^2 + d^2) + t^2. $$ \\
+Let $ y \coloneqq (y_1, ..., y_{m + 1}) $ be such that $ (y_i, y_{i + 1}, y_{i + 2}, y_{i + 3}) = (x_i, x_{i + 1}, x_{i + 2}, x_{i + 3})B $ with invertible $ B $ constructed as in Proposition \ref{prop:foursquarematrix}, with $ b_1 = a, b_2 = b, b_3 = c, b_4 = d $. Then by construction: $$ \sum_{i = 1}^m z_i^2 + nx_{m + 1}^2 = \sum_{i = 1}^{\frac{m + 1}{4}} \left( y_i^2 + y_{i + 1}^2 + y_{i + 2}^2 + y_{i + 3}^2 \right) + t^2 = \sum_{i = 1}^{m + 1} y_i^2 + t^2. $$ \\
+Additionally, each $ y_i $ is also a linear combination of $ x_1, ..., x_{m + 1} $, so $ y_i = \sum_{j = 1}^m b_{ij} x_j $ for some $ b_{ij} \in \Z $. As $ x_1, ..., x_{m + 1} $ are variables, it is possible to choose $ x_1, ..., x_m $ depending on $ a_{ij} $ and $ b_{ij} $, such that $ z_i = \pm y_i $ for all $ i \in \{ 1 .. m \} $, giving: $$ \sum_{i = 1}^m y_i^2 + nx_{m + 1}^2 = \sum_{i = 1}^{m + 1} y_i^2 + t^2 \implies nx_{m + 1}^2 = y_{m + 1}^2 + t^2. $$ \\
+Finally, this can be rewritten as $ n = \left( \frac{y_{m + 1}}{x_{m + 1}} \right)^2 + \left( \frac{t}{x_{m + 1}} \right)^2 $, which by Proposition \ref{prop:rationalintegersquare} proves that $ n $ is a sum of two squares.
+\end{proof}
+
+\begin{remark}
+Considering orders less than a fixed small order, say 24, it is not difficult to check if an order is a sum of two squares. One method would be through a simple number sieve, by first systematically enumerating all the possibly sums of two squared integers less than 24, then remove all of these sum of two squares, prime powers, as well as natural numbers congruent to 0 or 3 modulo 4. This eventually results to the sequence A046712 on the OEIS \cite{A046712}, which begins with 6, 14, 21, and 22. By this argument, there are no finite projective planes of order 6, 14, 21, or 22.
+\end{remark}
+
+\pagebreak
+
+\section{Search of planes of other orders}
+
+With finite projective planes of orders ruled out by the Bruck-Ryser theorem out of the way, the focus is shifted to the existence of planes of orders that are not.
+
+\begin{remark}
+The orders of finite projective planes not more than 100 that are not ruled out by Theorem \ref{thm:primepower} and Theorem \ref{thm:bruckryser} are 10, 12, 15, 18, 20, 24, 26, 28, 34, 35, 36, 39, 40, 44, 45, 48, 50, 51, 52, 55, 56, 58, 60, 63, 65, 68, 72, 74, 75, 76, 80, 82, 84, 85, 87, 88, 90, 91, 92, 95, 96, 98, 99, and 100.
+\end{remark}
+
+Unfortunately, it is still currently an open problem if there is another restriction, possibly stronger than the Bruck-Ryser theorem, which can be placed on the order of a projective plane. As such, several ad-hoc methods have been developed to tackle planes of each order separately, many of them computational in nature to quickly eliminate cases generated by theory.
+
+Due to the sheer size of the structure in question and the number of considerations for each plane, it is often computationally intensive. There is also an inherent difficulty in translating the theory into cases checkable by a computer, and in reducing the number of cases to be considered viable in terms of CPU time.
+
+Despite this, it has been proven with computer assistance that \textbf{a plane of order 10 does not exist}. This is taken from a joint publication in \cite{order10}, that checked about $ 2 \times 10^{14} $ cases, and took over 800 days on a VAX-11/780 at the year of publication. The search was, in brief, to classify all the cases for a 111 $ \times $ 111 valid incidence matrix to exist, which would directly correspond to the plane of order 10.
+
+However, a computational proof do entail certain issues. For instance, performing a brute-force search, rather than through relating proven ideas, sheds less light to the underpinnings of the theory. As pointed out by the authors of the paper themselves, this should not be considered as a "proof", in the traditional sense, that a plane of order 10 cannot exist. They even presented reasons for claiming that the probability of the existence of an undiscovered plane of order 10 is very small, but not zero.
+
+Software errors, particularly programming errors, were the most common. Several checks for correctness to minimise errors were made, including having two different independent programs checking the same configurations at different paces. They found no discrepancies in the results, leading to confidence of having no programming errors whatsoever, but encouraged others to do independent verifications of their work.
+
+Hardware errors were unavoidable due to the presence of non-determinism in computer hardware, such as the random changing of bits in a computer word that removes an entire branch of cases during the search. They predicted that such errors occur one in a thousand hours of computing, and even discovered a hardware failure during one of the searches before restarting it.
+
+After the proof of the non-existence of a finite projective plane of order 10, no full proofs of other orders have been proposed, the first one merely conjectured to not exist being order 12.
+
+\chapter{Non-uniqueness of planes of order nine}
+
+In the previous two chapters, discussions were mainly on the existence or non-existence of finite projective planes of various orders, while several claims were made that uniqueness of such planes do not hold in general, and the first plane of which this fails happens to be of order 9. This chapter will justify that there indeed are at least three planes of order 9 that are non-isomorphic, but only a short discussion will be provided on the fact there are exactly four of these.
+
+\section{Algebraic preliminaries}
+
+As a direct result of Theorem \ref{thm:primepower}, since 9 is a prime power, it is known that a Desarguesian plane of order 9 exists, which will be denoted as follows.
+
+\begin{definition}[$ \Phi $]
+The finite projective plane $ \Phi $ is the Desarguesian plane of order $ 9 $.
+\end{definition}
+
+This chapter hence amounts to justifying that there are non-Desarguesian planes of order 9.
+
+\subsection{Planar ternary rings}
+
+For the proof of this, much algebraic preliminaries would be needed to even describe the existence of these planes. It was mentioned in Proposition \ref{prop:pfplane} that finite Desarguesian planes can be constructed as homogeneous coordinates, but this is restrictive. For instance, attempting to generalise to modules over rings where scalars do not have multiplicative inverses would not work. This section will introduce a different algebraic method that allows the generalisation to work for arbitrary ring-like structures. To start, the following definition of a family of algebraic structures, known as planar ternary rings, is crucial.
+
+\begin{definition}[Planar ternary ring]
+A \textbf{planar ternary ring} (PTR) is an ordered quadruple $ (R, T, 0, 1) $, where $ R $ is a set, with two distinguished and different elements $ 0, 1 \in R $, and a ternary operation $ T : R \times R \times R \to R $, which satisfies these five axioms:
+\begin{enumerate}
+  \item for all $ a, b \in R $, we have $ T(a, 0, b) = T(0, a, b) = b $,
+  \item for all $ a \in R $, we have $ T(1, a, 0) = T(a, 1, 0) = a $,
+  \item for all $ a, b, c, d \in R $ such that $ a \ne c $, there is a unique $ x \in R $ such that $ T(x, a, b) = T(x, c, d) $,
+  \item for all $ a, b, c \in R $, there is a unique $ x \in R $, such that $ T(a, b, x) = c $, and
+  \item for all $ a, b, c, d \in R $ such that $ a \ne c $, there are unique $ x, y \in R $ such that $ T(a, x, y) = b $ and $ T(c, x, y) = d $.
+\end{enumerate}
+Define the addition operation $ + : R \times R \to R $ such that for all $ a, b \in R $, we have $ a + b = T(a, 1, b) $, and define the multiplication operation $ \cdot : R \times R \to R $ such that for all $ a, b \in R $, we have $ a \cdot b = T(a, b, 0) $. A PTR $ (R, T, 0, 1) $ is also said to be \textbf{linear} if for all $ a, b, c \in R $, we have $ T(a, b, c) = ab + c $.
+\end{definition}
+
+\begin{remark}
+It is clear that in linear PTRs, the ternary operation depends entirely on the two binary operations, leaving it redundant. As such, they can be instead written as the ordered quintuple $ (R, +, \cdot, 0, 1) $.
+\end{remark}
+
+To motivate the reason in using PTRs for finite projective planes, a relation to the familiar skew-fields definition in a previous chapter is as follows.
+
+\begin{proposition}
+Let $ (R, +, \cdot, 0, 1) $ be a skew-field. Then $ (R, +, \cdot, 0, 1) $ is a linear PTR.
+\end{proposition}
+
+\begin{proof}
+Fix $ a, b, c, d \in R $. It is sufficient to check the five axioms of PTRs, defining the ternary operation as $ T(a, b, c) = a \cdot b + c $.
+\begin{enumerate}
+  \item $ a \cdot 0 + b = 0 \cdot a + b = b $ holds by the additive identity.
+  \item $ 1 \cdot a + 0 = a \cdot 1 + 0 = a $ holds by the multiplicative identity.
+  \item Let $ a \ne c $. Then $ x = (a - c)^{-1} \cdot (d - b) $ is the unique solution to the equation $ x \cdot a + b = x \cdot c + d $.
+  \item $ x = c - a \cdot b $ is the unique solution to the equation $ a \cdot b + x = c $.
+  \item Let $ a \ne c $. Then $ x = (b - d) \cdot (a - c)^{-1} $ and $ y = b - a \cdot x $ are unique solutions to the equations $ a \cdot x + y = b $ and $ c \cdot x + y = d $.
+\end{enumerate}
+\end{proof}
+
+\subsection{Non-homogeneous coordinates}
+
+With this in mind, the method of constructing general projective planes using general PTRs in discussion, known as \textbf{non-homogeneous coordinates}, is defined in the following proposition.
+
+\begin{proposition}
+\label{prop:ptrplane}
+Let $ (R, T, 0, 1) $ be a PTR and $ \infty \notin R $ be an additional symbol, and let:
+\begin{enumerate}
+  \item $ P \coloneqq \{ p_{(a, b)} \mid a, b \in R \} \cup \{ p_a \mid a \in R \} \cup \{ p_\infty \} $,
+  \item $ L \coloneqq \{ l_{(a, b)} \mid a, b \in R \} \cup \{ l_a \mid a \in R \} \cup \{ l_\infty \} $, and
+  \item $ I \coloneqq I_1 \cup I_2 \cup I_3 \cup I_4 \cup I_5 \cup I_6 $, where
+    \begin{enumerate}
+      \item $ I_1 \coloneqq \{ (p_{(x, y)}, l_{(m, k)}) \mid p_{(x, y)} \in P, l_{(m, k)} \in L, T(m, x, y) = k \} $,
+      \item $ I_2 \coloneqq \{ (p_{(x, y)}, l_k) \mid p_{(x, y)} \in P, l_k \in L, x = k \} $,
+      \item $ I_3 \coloneqq \{ (p_x, l_{(m, k)}) \mid p_x \in P, l_{(m, k)} \in L, x = m \} $,
+      \item $ I_4 \coloneqq \{ (p_x, l_\infty) \mid p_x \in P \} $,
+      \item $ I_5 \coloneqq \{ (p_\infty, l_k) \mid l_k \in L \} $, and
+      \item $ I_6 \coloneqq \{ (p_\infty, l_\infty) \} $.
+    \end{enumerate}
+\end{enumerate}
+Then $ \P(R) \coloneqq (P, L, I) $ is a finite projective plane, \textbf{coordinatised} by the PTR $ (R, T, 0, 1) $.
+\end{proposition}
+
+\begin{remark}
+The primary motivation for constructing finite projective planes in this way is that, given a finite projective plane $ \P \equiv (P, L, I) $, the four points $ p_1, p_2, p_3, p_4 \in P $ in the quadrangle can be chosen as $ p_1 \coloneqq p_0 $, $ p_2 \coloneqq p_\infty $, $ p_3 \coloneqq p_{(0, 0)} $, and $ p_4 \coloneqq p_{(1, 1)} $. With the lines and the incidence relation defined appropriately, we have that $ \P $ naturally satisfies the axioms of PTRs. A more detailed explanation can be found in \cite{5}.
+\end{remark}
+
+\begin{proof}
+Proof directly taken from \cite{5}. \\
+Fix $ a, b, c, d \in R $. It is sufficient to check the three axioms of projective planes.
+\begin{enumerate}
+  \item If $ a \ne c $, then by axiom 3, for any given $ b, d \in R $, there is a unique $ m \in R $ such that $ T(m, a, b) = T(m, c, d) $. Then the points $ p_{(a, b)} $ and $ p_{(c, d)} $ are on the unique line $ l_{(m, T(m, a, b))} $. \\
+    Clearly, the two points $ p_{(a, b)} $ and $ p_{(a, d)} $ are on the line $ l_a $. If both of these points were also on the line $ l_{(m, k)} $, then we would have $ T(m, a, b) = k = T(m, a, d) $, which contradicts axiom 4. Thus there is a unique line joining any two distinct points such that neither is on $ l_\infty $. \\
+    Let $ p_m $ be any point not $ p_\infty $ on $ l_\infty $, and $ p_{(a, b)} $ be any point also not on $ l_\infty $. Any line through $ p_m $ is either $ l_\infty $ or is of the form $ l_{(m, k)} $ for some $ k \in R $, and the line $ l_{(m, k)} $ passes through $ p_{(a, b)} $ if and only if $ T(m, a, b) = k $. However, since $ T(m, a, b) $ is uniquely determined by $ m $, $ a $, and $ b $, so that $ l_{(m, T(m, a, b))} $ is the unique line containing $ p_m $ and $ p_{(a, b)} $. Since any line not on $ l_\infty $ which contains $ p_\infty $ is of the form $ l_k $ for some $ k \in R $, the unique line joining $ p_\infty $ and $ p_{(a, b)} $ is $ l_a $. Finally, $ p_{m_1} $ and $ p_{m_2} $ clearly have $ l_\infty $, and no other line, in common.
+  \item It is sufficient to show that any two distinct lines have at least one point in common. Consider the lines $ l_{(m_1, k_1)} $ and $ l_{(m_2, k_2)} $. If $ m_1 \ne m_2 $, then, by axiom 5, there exists a unique ordered pair $ (a, b) $ such that $ T(m_1, a, b) = k_1 $ and $ T(m_2, a, b) = k_2 $ so that the point $ p_{(a, b)} $ is on both $ l_{(m_1, k_1)} $ and $ l_{(m_2, k_2)} $. If $ m_1 = m_2 $, then $ p_{m_1} $ is on both lines, hence any pair of distinct lines of the form $ l_{(m, k)} $ have a common point. Clearly, the line $ l_{(m, k)} $ meets $ l_\infty $ at $ p_m $, so, in order to show that this intersects any other line, it is sufficient to only consider the intersection of $ l_{(m, k)} $ with $ l_h $, where $ h \in R $ and $ h \ne m $. However, these two lines intersect in the point $ (h, h') $ where $ h' $ exists by axiom 4 and is given by $ T(x, h, h') = k $. Since any two lines $ l_{m_1} $ and $ l_{m_2} $ intersect at $ p_\infty $, we have that any two lines intersect in a unique point.
+  \item The points $ p_0 $, $ p_\infty $, $ p_{(0, 0)} $, and $ p_{(1, 1)} $ clearly forms a quadrangle.
+\end{enumerate}
+\end{proof}
+
+In fact, with a slight change in perspective, non-homogeneous coordinates of a finite projective plane can be derived from its homogeneous coordinates if it is possible to construct it in that way. A possible transformation is as follows, as described in \cite{coordinatisation}.
+
+\begin{example}
+Let $ \P \equiv (P, L, I) $ be a finite Desarguesian plane over a skew-field $ F $ constructed with the notation in Proposition \ref{prop:pfplane}, and $ S $ be the set of all symbols of $ \P(R) $ in Proposition \ref{prop:ptrplane} written as elements of $ F $. With this notation, let the map $ \phi : V^* / F^* \to S $ be such that for all $ [(x, y, z)^T] \in V^* $: $$ \phi \left( \left[ \begin{pmatrix} x \\ y \\ z \end{pmatrix} \right] \right) = \begin{cases} (\frac{x}{z}, \frac{y}{z}) & z \ne 0 \\ (\frac{y}{x}) & x \ne 0, z = 0 \\ (\infty) & x = z = 0 \end{cases}. $$ Then applying $ \phi $ to all equivalence classes $ [v] \in V^* / F^* $ in all points $ p_{[v]} \in P $ and all lines $ l_{[v]} \in L $ indeed gives a valid non-homogeneous coordinatisation of $ \P $.
+\end{example}
+
+As a concrete example of non-homogeneous coordinatisation, the Fano plane is provided as follows.
+
+\begin{example}
+The coordinatising skew-field of the Fano plane has the symbols $ (0, 0) $, $ (0, 1) $, $ (1, 0) $, $ (1, 1) $, $ (0) $, $ (1) $, and $ (\infty) $ in its points and lines, with the quadrangle being $ p_0, p_\infty, p_{(0, 0)}, p_{(1, 1)} $.
+\end{example}
+
+\subsection{Properties of planar ternary rings}
+
+Any finite projective plane can now be solely defined by its coordinatising PTR together with the initial choice of the quadrangle. As in other algebraic structures, the notion of isomorphism of PTRs is often useful, defined as follows.
+
+\begin{definition}[Isomorphism]
+Let $ P \equiv (R, T, 0, 1) $ and $ P' \equiv (R', T', 0', 1') $ be two PTRs. An \textbf{isomorphism} from $ P $ to $ P' $ is a bijection $ \alpha : R \to R $ such that for all $ a, b, c \in R $, we have $ \alpha(T(a, b, c)) = T(\alpha(a), \alpha(b), \alpha(c)) $.
+\end{definition}
+
+\begin{remark}
+It is trivial to verify that isomorphism of PTRs is an equivalence relation.
+\end{remark}
+
+It is then clear that two finite projective planes are isomorphic if their coordinatising PTRs are isomorphic. As such, to study the structure of a plane, it is sufficient to study the properties of its coordinatising PTR, especially those of its two binary operations that define its ring-like structure. In particular, the definition of a group-like structure is as follows.
+
+\begin{definition}[Loop]
+A \textbf{loop} is an ordered triple $ (R, \cdot, 1) $, where $ R $ is a set, with a distinguished $ 1 \in Q $, and with a binary operation $ \cdot : R \times R \to R $ such that:
+\begin{enumerate}
+  \item for all $ a \in R $, we have $ 1 \cdot a = a \cdot 1 = a $,
+  \item for all $ a, b \in R $, there are unique $ x, y \in R $ such that $ a \cdot x = b = y \cdot a $.
+\end{enumerate}
+\end{definition}
+
+A loop is hence simply a group without requiring associativity. The loop structure of the two binary operations of a PTR is illustrated in the following proposition.
+
+\begin{proposition}
+Let $ (R, T, 0, 1) $ be a PTR. Then:
+\begin{enumerate}
+  \item $ (R, +, 0) $ is a loop, and
+  \item $ (R \setminus \{ 0 \}, \cdot, 1) $ is a loop.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Check the two axioms of loops in both parts.
+\begin{enumerate}
+  \item Clearly 0 is the additive identity. Fix $ a, b \in R $. Then there is a unique $ x \in R $ such that $ a + x = T(a, 1, x) = b $. Similarly there is a unique $ y \in R $ such that $ y + a = T(y, 1, a) = T(y, 0, b) = b $.
+  \item Clearly 1 is the multiplicative identity. Fix $ a, b \in R $. Then there is a unique solution $ y \in R $ such that $ y \cdot a = T(y, a, 0) = T(y, 0, b) = b $. Similarly there is a unique $ x, z \in R $ such that $ a \cdot x + z = T(a, x, z) = b $ and $ z = T(0, x, z) = 0 $. The latter implies that there is a unique solution to $ a \cdot x = b $.
+\end{enumerate}
+\end{proof}
+
+\subsection{Quasi-fields}
+
+These digressions are not for naught, as they lead to the different types of PTRs coordinatising non-Desarguesian projective planes, namely quasi-fields, near-fields, and semi-fields. Most of these definitions are adopted from \cite{planarternaryring}, with that of a quasi-field as follows.
+
+\begin{definition}[Quasi-field]
+A left \textbf{quasi-field}, also known as a Veblen-Wedderburn system, is an ordered quintuple $ (R, +, \cdot, 0, 1) $, where $ R $ is a set, with two distinguished and different $ 0, 1 \in R $, and with two binary operations $ + : R \times R \to R $ and $ \cdot : R \times R \to R $, which satisfies the following weakening of the axioms of skew-fields:
+\begin{enumerate}
+  \item the ordered triple $ (R, +, 0) $ is a group,
+  \item the ordered triple $ (R \setminus \{ 0 \}, \cdot, 1) $ is a loop,
+  \item for all $ a, b, c \in R $, we have $ a \cdot (b + c) = a \cdot b + a \cdot c $ (left distributivity),
+  \item for all $ a, b, c \in R $ such that $ a \ne b $, there is a unique $ x \in R $ such that $ a x = b x + c $.
+\end{enumerate}
+A right quasi-field is similarly defined. A quasi-field is said to be \textbf{abelian} if it is a field.
+\end{definition}
+
+Clearly every skew-field is a left quasi-field. In fact, a quasi-field can alternatively be defined from a PTR, as illustrated in the following proposition.
+
+\begin{proposition}
+A left quasi-field $ (R, +, \cdot, 0, 1) $ is a linear PTR such that the ordered triple $ (R, +, 0) $ is a group (associativity of +), and for all $ a, b, c \in R $, we have $ a \cdot (b + c) = a \cdot b + a \cdot c $ (left distributivity).
+\end{proposition}
+
+\begin{proof}
+Fix $ a, b, c, d \in R $. It is sufficient to check the five axioms of PTRs, defining the ternary operation as $ T(a, b, c) = a \cdot b + c $.
+\begin{enumerate}
+  \item $ a \cdot 0 + b = 0 \cdot a + b = b $ holds by the additive identity.
+  \item $ 1 \cdot a + 0 = a \cdot 1 + 0 = a $ holds by the multiplicative identity.
+  \item Let $ a \ne c $, and $ x \in R $ be a solution to the equation $ x \cdot a + b = x \cdot c + d $, so $ b - d = - x \cdot a + x \cdot c $. By the left distributivity property, $ b - d = x \cdot (-a + c) $, which by the loop property gives a unique solution $ x $.
+  \item By the abelian group property of quasi-fields, $ a \cdot b + x = c $ has the unique solution $ x = c - a \cdot b $.
+  \item Let $ a \ne c $, and $ x, y \in R $ be solutions to the equations $ a \cdot x + y = b $ and $ c \cdot x + y = d $, so $ -a \cdot x + b = y = -c \cdot x + d $. By the last axiom, $ a \cdot x = c \dot x + (b - d) $, so there is a unique solution $ x $. Thus $ y = -a \cdot x + b $ is also unique.
+\end{enumerate}
+\end{proof}
+
+\begin{remark}
+A left quasi-field is actually defined as a \textbf{cartesian group} with left distributivity, which is in turn defined as an associative linear PTR. A right quasi-field is similarly defined. Cartesian groups will not be discussed here for simplicity.
+\end{remark}
+
+\subsection{Properties of quasi-fields}
+
+Several interesting properties can be derived directly from the axioms of quasi-fields. The following proposition is rather fundamental, but is not stated as an axiom as it can be derived from the other axioms.
+
+\begin{proposition}
+\label{prop:quasiabelian}
+Let $ (R, +, \cdot, 0, 1) $ be a left quasi-field. Then the group $ (R, +, 0) $ is abelian.
+\end{proposition}
+
+\begin{proof}
+Proof adopted from \cite{abelian}. \\
+Fix $ a, b \in R $. If $ a = 0 $ or $ b = 0 $, then $ a + b = b + a $ holds trivially. Otherwise $ a \ne 0 $ and $ b \ne 0 $, then there is a $ c \in R $ such that $ c \cdot a = b + a - b $. Suppose for a contradiction that $ c \ne 1 $. $ \text{\Lightning} $ Also suppose that there are distinct $ x, y \in R $ such that $ - c \cdot x + x = b = - c \cdot y + y $, so $ x - y = c \cdot x - c \cdot y $. By left distributivity, $ x - y = c \cdot (x - y) $, which gives $ x = y $. $ \text{\Lightning} $ Hence there is a unique $ x \in R $ such that $ - c \cdot x + x = b $. However, this also implies that, despite $ x \ne x + a $: $$ -c \cdot (x + a) + (x + a) = -c \cdot a - c \cdot x + x + a = -(b + a - b) - c \cdot x + (c \cdot x + b) + a = b - a - b - c \cdot x + c \cdot x + b + a = b, $$ contradicting the uniqueness of $ x $. Thus $ c = 1 $, so $ a + b = b + a $ and the group $ (R, +, 0) $ is abelian.
+\end{proof}
+
+A related structure is a quasi-field without one of the axioms, defined as follows.
+
+\begin{definition}[Weak quasi-field]
+A left \textbf{weak quasi-field} is a quasi-field as defined above without axiom 4. A right weak quasi-field is defined similarly.
+\end{definition}
+
+It is clear that a quasi-field is a weak quasi-field. However, as the scope of discussion is again limited to finite projective planes, only finite weak quasi-fields will be considered, leading directly to the following proposition.
+
+\begin{proposition}
+\label{prop:weakquasi}
+Let $ (R, +, \cdot, 0, 1) $ be a finite left weak quasi-field. Then $ (R, +, \cdot, 0, 1) $ is a left quasi-field.
+\end{proposition}
+
+\begin{proof}
+Fix $ a, b, c \in R $ such that $ a \ne b $. $ \text{\Lightning} $ Suppose there are two distinct $ x, x' \in R $ such that $ ax = bx + c $ and $ ax' = bx' + c $. Subtracting gives $ ax - bx = ax' - bx' $, which can be rewritten as $ a (x - x') = b (x - x') $ by commutativity of $ + $ and left distributivity. Right cancellation of $ x - x' \ne 0 $ gives $ a = b $. $ \text{\Lightning} $ Thus there is a unique $ x \in R $ such that $ ax = bx + c $, so $ (R, +, \cdot, 0, 1) $ is a left quasi-field.
+\end{proof}
+
+This shows that finite quasi-fields are equivalent to weak quasi-fields, as such can be used interchangeably in finite contexts. This also implicitly means that axiom 4 in the above definition of a finite quasi-field can actually be implied from the other three axioms. Now an important notion of any algebraic structure is its kernel, defined for a general weak quasi-field as follows.
+
+\begin{definition}[Kernel]
+The \textbf{kernel} $ K $ of a left weak quasi-field $ (R, +, \cdot, 0, 1) $ is the set of all elements $ c \in R $, such that for all $ a, b \in R $:
+\begin{enumerate}
+  \item $ a \cdot (b \cdot c) = (a \cdot b) \cdot c $ (associativity of $ \cdot $), and
+  \item $ (a + b) \cdot c = a \cdot c + b \cdot c $ (right distributivity).
+\end{enumerate}
+The kernel of a right weak quasi-field is defined similarly.
+\end{definition}
+
+Note that the above definition applies similarly to a general quasi-field. The kernel of a weak quasi-field has an interesting enough structure, such that equipping it with the restricted binary operations of the quasi-field would almost make it a field.
+
+\begin{proposition}
+Let $ (R, +, \cdot, 0, 1) $ be a left weak quasi-field. Then the kernel $ K \subset R $ is such that $ (K, +, \cdot, 0, 1) $ is a skew-field.
+\end{proposition}
+
+\begin{proof}
+It is sufficient to check that $ (K, +, \cdot, 0, 1) $ is a ring and for any $ k \in K \setminus \{ 0 \} $, there is a unique $ j \in K \setminus \{ 0 \} $ such that $ j \cdot k = k \cdot j = 1 $.
+\begin{enumerate}
+  \item It is easy to see that $ 0, 1 \in K $. Associativity of $ + $ follows from the definition of a weak quasi-field and commutativity of $ + $ follows from Proposition \ref{prop:quasiabelian}. For any $ j, k \in K $, we have: $$ a \cdot (b \cdot (j - k)) = a \cdot (b \cdot j - b \cdot k) = a \cdot (b \cdot j) - a \cdot (b \cdot k) = (a \cdot b) \cdot j - (a \cdot b) \cdot k = (a \cdot b) \cdot (j - k), $$ $$ (a + b) \cdot (j - k) = (a + b) \cdot j - (a + b) \cdot k = a \cdot j + b \cdot j - a \cdot k - b \cdot k = a \cdot (j - k) + b \cdot (j - k). $$ Hence $ j - k \in K $ and $ (K, +, 0) $ is an abelian group. Finally, left distributivity follows from the definition of a left weak quasi-field, while associativity of $ \cdot $ and right distributivity follows from the definition of its kernel. Thus $ (K, +, \cdot, 0, 1) $ is indeed a ring.
+  \item Now fix any $ k \in K \setminus \{ 0 \} $. The loop property of a weak quasi-field gives unique $ x, y \in R $ such that $ k \cdot x = 1 $ and $ y \cdot k = 1 $. Then it holds that: $$ (k \cdot (x - y)) \cdot k = (k \cdot x - k \cdot y) \cdot k = (k \cdot x) \cdot k - (k \cdot y) \cdot k = (k \cdot x) \cdot k - k \cdot (y \cdot k) = 1 \cdot k - k \cdot 1 = k - k = 0. $$ Since $ k \ne 0 $, we have $ x - y = 0 $ and hence $ j \coloneqq x = y $ is unique. Clearly $ j \ne 0 $, and: $$ (a \cdot (b \cdot j)) \cdot k = a \cdot ((b \cdot j) \cdot k) = a \cdot (b \cdot (j \cdot k)) = a \cdot b = (a \cdot b) \cdot (j \cdot k) = ((a \cdot b) \cdot j) \cdot k, $$ $$ ((a + b) \cdot j) \cdot k = (a + b) \cdot (j \cdot k) = a + b = a \cdot (j \cdot k) + b \cdot (j \cdot k) = (a \cdot j) \cdot k + (b \cdot j) \cdot k = (a \cdot j + b \cdot j) \cdot k, $$ Thus right cancellation of $ k \ne 0 $ gives $ a \cdot (b \cdot j) = (a \cdot b) \cdot j $ and $ (a + b) \cdot j = a \cdot j + b \cdot j $, so $ j \in K \setminus \{ 0 \} $.
+\end{enumerate}
+\end{proof}
+
+In a different perspective, a weak quasi-field is simply a vector space over its kernel skew-field, with scalar multiplication being the multiplication operation. Again, Theorem \ref{thm:wedderburn} implies that finite skew-fields are finite fields and have prime power order, so finite quasi-fields as finite-dimensional vector spaces over finite kernel skew-fields indeed have prime power order. This means that any undiscovered finite non-Desarguesian planes of order not a prime power, if they exist, cannot be coordinatised with finite quasi-fields and hence cannot be proven to not exist with this method.
+
+\subsection{Near-fields and semi-fields}
+
+Although only the theory of quasi-fields is required for the next section, some have an additional associativity property that justify being called near-fields, defined as follows.
+
+\begin{definition}[Near-field]
+A finite left \textbf{near-field} $ (R, +, \cdot, 0, 1) $ is a finite left quasi-field such that the ordered triple $ (R \setminus \{ 0 \}, \cdot, 1) $ is a group (associativity of $ \cdot $). A finite right near-field is similarly defined.
+\end{definition}
+
+Finally, the definition of a semi-field, often referred to in literature as a coordinatising PTR constructed from a quasi-field in a different way, will be provided below appropriately.
+
+\begin{definition}[Semi-field]
+A \textbf{semi-field} is a left quasi-field that is also a right quasi-field.
+\end{definition}
+
+With these two definitions, a finite skew-field can be alternatively defined as a finite left near-field that is also a finite right near-field, or as a finite semi-field with a multiplicative group. In summary, it is obvious that the following chain of class inclusions for finite PTRs hold.
+
+\begin{center}
+\includegraphics[width=\textwidth]{figures/commutative.jpg}
+Relationship between different types of finite PTRs
+\end{center}
+
+\begin{remark}
+As any finite skew-field is a finite field by Theorem \ref{thm:wedderburn}, commutativity is indeed redundant here. Strictly speaking, the relation between near-fields and quasi-fields do not hold for infinite cases. The above definition is in fact of a \textbf{planar near-field}, but is a simplification justified as all finite near-fields are planar.
+\end{remark}
+
+\section{Existence of non-Desarguesian planes}
+
+For this section, denote $ (x, y)^T $ as $ (x, y) $ and omit $ \cdot $, for ease of notation.
+
+With properties and definitions of several types of PTRs defined in the previous section, the existence of a non-Desarguesian plane of order 9 can be shown succinctly and constructively. The proof lies on the intuition that finite Desarguesian planes coordinatised by an arbitrary PTR implies that the PTR is in fact a skew-field. This is stated more precisely in the following proposition with the coordinatisation method by algebraic structures discussed in the previous section.
+
+\begin{proposition}
+Let $ \P(R) $ be a finite projective plane coordinatised by a finite near-field $ (R, +, \cdot, 0, 1) $, and $ \P(F) $ be a finite projective plane coordinatised by a finite skew-field $ (F, +, \cdot, 0, 1) $. If $ \P(R) \cong \P(F) $, then $ (R, +, \cdot, 0, 1) \cong (F, +, \cdot, 0, 1) $.
+\end{proposition}
+
+\begin{proof}
+Omitted, see \cite{affineplanes}.
+\end{proof}
+
+\begin{remark}
+The statement does not generally hold if one of the finite projective planes given above is not coordinatised by a finite skew-field. That is, if two finite projective planes are isomorphic, their coordinatising PTRs are not necessarily isomorphic.
+\end{remark}
+
+\subsection{Hall quasi-fields}
+
+It follows that in order to construct a non-Desarguesian projective plane, it is sufficient to construct a left quasi-field that is not a skew-field. This can be done by showing that a given quasi-field is not right distributive, or vice versa, so that it is not a semi-field. Alternatively, this can be done by showing that a given left or right quasi-field is not associative in its multiplication operation, so that it is not a near-field. The quasi-field constructed in the definition below, named after M Hall, fits the former description.
+
+\begin{definition}[Hall quasi-field]
+Let $ f(x) \coloneqq x^2 - gx - h $ be an irreducible quadratic polynomial over a finite field $ \F_n \equiv (F, +, \cdot, 0, 1) $ of order $ n $, such that $ g, h \in \F_n $. Now let $ \G $ be a two-dimensional vector space $ (G, \oplus, \cdot, (0, 0), 1) $ over $ \F_n $, where $ G = \F_n \times \F_n $. Then a \textbf{Hall quasi-field} $ \H $ of order $ n^2 $ is an ordered quintuple $ (G, \oplus, \odot, (0, 0), (1, 0)) $, where the multiplication operation $ \odot : G \to G $ is such that: $$ (a, b) \odot (c, d) = \begin{cases} (ac, ad) & b = 0 \\ (ac - b^{-1} d f(a), bc - ad + gd) & b \ne 0 \end{cases}. $$ $ \H $ is said to be constructed by $ f(x) \in \F_n[x]_{\le 2} $.
+\end{definition}
+
+\begin{remark}
+The subtraction operation of Hall quasi-fields is denoted as $ \ominus $.
+\end{remark}
+
+It is not immediately clear that this is a quasi-field. To prove this, a useful lemma is as follows.
+
+\begin{lemma}
+\label{lemma:hallquasi}
+Let $ \H \equiv (G, \oplus, \odot, (0, 0), (1, 0)) $ be a Hall quasi-field constructed by $ f(x) \equiv x^2 - gx - h \in \F_n[x]_{\le 2} $. Then for all $ (a, b), (c, d), (e, f) \in G $:
+\begin{enumerate}
+  \item if $ b \ne 0 $, then $ f((a, b)) = (0, 0) $,
+  \item if $ b = 0 $, then $ (a, b) \odot (c, d) = (c, d) \odot (a, b) $,
+  \item if $ f = 0 $, then $ (a, b) \odot ((c, d) \odot (e, f)) = ((a, b) \odot (c, d)) \odot (e, f) $, and
+  \item if $ f = 0 $, then $ ((a, b) \oplus (c, d)) \odot (e, f) = (a, b) \odot (e, f) \oplus (c, d) \odot (e, f) $.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The last two parts will be omitted for the sake of further discussion, as they are lengthy but can be derived by cases from the construction above. Check only the first two parts.
+\begin{enumerate}
+  \item Fix $ (a, b) \in G $ such that $ b \ne 0 $. Then:
+    \begin{align*}
+    f (a, b)
+    & = (a, b) \odot (a, b) \ominus g (a, b) \ominus h (1, 0) \\
+    & = (aa - b^{-1} b f(a), ba - ab + gb) \ominus (ga, gb) \ominus (h, 0) \\
+    & = (aa - b^{-1} b (a^2 - ga - h) - ga - h, ab - ab + gb - gb - 0)
+    = (0, 0).
+    \end{align*}
+  \item Fix $ (a, 0), (c, d) \in G $. Then: $$ (c, d) \odot (a, 0) = (ca - d^{-1} 0 f(c), da - c0 + g0) = (ca, da) = (ac, ad) = (a, 0) \odot (c, d). $$
+\end{enumerate}
+\end{proof}
+
+The last two parts of the lemma are exactly the two conditions for being a kernel of a left weak quasi-field. This means that if a Hall quasi-field is a left weak quasi-field, all elements of the form $ (a, 0) $, are in the kernel. Now this is indeed the case, as illustrated in the following proposition.
+
+\begin{proposition}
+Let $ \H $ be a Hall quasi-field. Then $ \H $ is a left quasi-field.
+\end{proposition}
+
+\begin{proof}
+Proof adopted from \cite{5}. \\
+Let $ \H \equiv (G, +, \cdot, (0, 0), (1, 0)) $ be a Hall quasi-field. It is sufficient to check the three axioms of left weak quasi-fields.
+\begin{enumerate}
+  \item The addition operation $ \oplus : G \times G \to G $ in the underlying vector space $ \G $ forms an abelian group with the elements of $ G $.
+  \item Fix $ (a, b), (c, d) \in G \setminus \{ (0, 0) \} $. It is sufficient to check the two axioms of loops. \\
+    Clearly the identity $ (1, 0) $ is such that $ (1, 0) \odot (a, b) = (a, b) \odot (1, 0) = (a, b) $. \\
+    Assume that there is a $ (x, y) \in G \setminus \{ (0, 0) \} $ such that $ (a, b) \odot (x, y) = (c, d) $. If $ b = 0 $, then $ a \ne 0 $, so solving $ (ax, ay) = (c, d) $ gives a unique solution $ (x, y) = (a^{-1} c, a^{-1} d) $. Otherwise if $ b \ne 0 $, then $ (ax - b^{-1} y f(a), bx - ay + gy) = (c, d) $, which can be rewritten in a matrix form as: $$ \two{a & -b^{-1} f(a)}{b & -a + g} \two{x}{y} = \two{c}{d}. $$ $ \text{\Lightning} $ Suppose the determinant $ a (-a + g) - b (-b^{-1} f(a)) = -h = 0 $, then $ f(x) = x^2 - gx = (x - g) x $, which is reducible. $ \text{\Lightning} $ Thus the determinant is non-zero and there is a unique solution $ (x, y) $. \\
+    Assume that there is a $ (x', y') \in G \setminus \{ (0, 0) \} $ such that $ (x', y') \odot (a, b) = (c, d) $ and that $ y' = 0 $ is a solution. If $ b = 0 $, then $ a \ne 0 $, so solving $ (x'a, x'b) = (c, d) $ gives a unique solution $ x' = ca^{-1} $ if and only if $ d = 0 $. If instead $ a = 0 $, then $ b \ne 0 $, so solving $ (x'a, x'b) = (c, d) $ gives a unique solution $ x' = db^{-1} $ if and only if $ c = 0 $. Otherwise if $ b \ne 0 $ and $ a \ne 0 $, then solving $ (x'a, x'b) = (c, d) $ gives a unique solution if and only if $ x' = ca^{-1} = db^{-1} $. Thus it remains to show that if either $ a = c = 0 $, $ b = d = 0 $, or $ ca^{-1} = db^{-1} $, then there are no solutions for $ y' \ne 0 $. \\
+    Now assume instead that $ y' \ne 0 $ is a solution, so $ (x'a - y'^{-1} b f(x'), y'a - x'b + gb) = (c, d) $, which can be written as $ (y'x'a - bx'^2 + bgx' + bh, x'y'a - x'^2 b + x'gb) = (y'c, x'd) $. This subtracts to give the linear equation $ bh = y'c - x'd $, which, with $ y'a - x'b + gb = d $, gives the same solutions as the latter with $ y'x'a - bx'^2 + bgx' + bh = c $. This can be written in a matrix form as: $$ \two{a & -b}{c & -d} \two{y'}{x'} = \two{d - gb}{bh}. $$ If $ b = 0 $, then $ a \ne 0 $, so solving this gives a solution $ (x', y') = (ca^{-1}, da^{-1}) $, which gives $ y = 0 $ if and only if $ d = 0 $. If $ b \ne 0 $, then multiplying $ db^{-1} $ to $ y'a - x'b + gb = d $ to give $ y'adb^{-1} - dx' + dg = d^2 b^{-1} $ and combining with $ bh = y'c - x'd $ gives the equation $ y'adb^{-1} - y'c = d^2 b^{-1} - dg - bh $. Finally, this can be rewritten in a compact form as $ y' (ad - bc) = b^2 f(db^{-1}) $. \\ 
+    $ \text{\Lightning} $ Suppose that either $ a = c = 0 $, $ b = d = 0 $, or $ ca^{-1} = db^{-1} $, so that $ ad - bc = 0 $. Then $ y' (ad - bc) = 0 $, but $ b^2 f(db^{-1}) \ne 0 $. $ \text{\Lightning} $ Thus there are no solutions for $ y' \ne 0 $ in this case. Otherwise, we have $ ad - bc \ne 0 $, so $ y' = (b^2 f(db^{-1})) (ad - bc)^{-1} \ne 0 $ is a unique solution.
+  \item The multiplication operation $ \odot : G \times G \to G $ is evidently a left linear transformation, making it left distributive.
+\end{enumerate}
+Thus $ \H $ is a left weak quasi-field. By Lemma \ref{lemma:hallquasi}, $ \H $ is simultaneously a two-dimensional module over its finite kernel skew-field, and hence is finite. By Proposition \ref{prop:weakquasi}, $ \H $ is a left quasi-field.
+\end{proof}
+
+Now it is sufficient to show that for a given finite field of order $ n \in \N $, if a Hall quasi-field of order $ n^2 $ constructed over it is not a semi-field, it would coordinatise a finite non-Desarguesian plane. However, it was mentioned in a previous chapter that the finite projective plane of order 4 is unique up to isomorphism and is in fact Desarguesian. This is not a contradiction, as specified in the following proposition.
+
+\begin{proposition}
+Let $ \H $ be a Hall quasi-field of order $ 4 $. Then $ \H $ is a field.
+\end{proposition}
+
+\begin{proof}
+It is sufficient to show that $ \H $ is right distributive, which is a straightforward verification of cases.
+\end{proof}
+
+Thus the non-Desarguesian argument does not hold for the Hall quasi-field of order 4. In fact, the converse of the above proposition also holds true, ultimately proving the existence of a non-Desarguesian plane of order 9, as illustrated below.
+
+\begin{proposition}
+Let $ \H $ be a Hall quasi-field of order greater than $ 4 $. Then $ \H $ is not a semi-field.
+\end{proposition}
+
+\begin{proof}
+Let $ \H \equiv (G, +, \cdot, (0, 0), (1, 0)) $ be a right distributive Hall quasi-field constructed by $ f(x) \equiv x^2 - gx - h \in \F_n[x]_{\le 2} $. It is sufficient to show that $ n = 2 $. Since $ 0, 1 \in \F_n $, we have $ (0, 1), (1, 0) \in G $, so that: $$ (-f(0), g - 1) = (1, 1) \odot (0, 1) = ((1, 0) \oplus (0, 1)) \odot (0, 1) = (1, 0) \odot (0, 1) \oplus (0, 1) \odot (0, 1) = (-f(0), g + 1). $$ Thus $ 1 = -1 $, which holds only if $ n = 2 $.
+\end{proof}
+
+This directly implies that there is an entire class of countably infinite finite projective planes, each coordinatised with a Hall quasi-field. Due to its importance, a name due to Hall was given as follows.
+
+\begin{definition}[Hall plane]
+A \textbf{Hall plane} is a finite non-Desarguesian plane coordinatised by a Hall quasi-field.
+\end{definition}
+
+\begin{remark}
+By construction, there are Hall planes of order $ n = p^{2q} $ for $ q \in \N $ and prime $ p \in \N $. However, since Hall planes are generally defined to be non-Desarguesian, it is customary to exclude the plane of order $ 4 = 2^2 $ in the definition, requiring $ n > 4 $.
+\end{remark}
+
+Finally, the titular plane will be denoted as follows.
+
+\begin{definition}[$ \Omega $]
+The finite projective plane $ \Omega $ is the Hall plane of order $ 9 $.
+\end{definition}
+
+\begin{remark}
+It is easy to see that $ \Omega $ is not self-dual as it is coordinatised by a left quasi-field that is not a right quasi-field.
+\end{remark}
+
+An interesting note is that there are exactly four non-isomorphic non-abelian quasi-fields, all of which coordinatise $ \Omega $. Three of these are Hall quasi-fields constructed by three different initial irreducible quadratic polynomials, namely $ f(x) = x^2 + 1 $, $ f(x) = x^2 + x - 1 $, and $ f(x) = x^2 - x - 1 $, while the fourth by a different method. In fact, the first of these generates a near-field, as illustrated in the following stronger proposition.
+
+\begin{proposition}
+Let $ \H $ be a Hall quasi-field of order $ n \in \N $ constructed over the irreducible quadratic polynomial $ f(x) \in \F_n[x]_{\le 2} $. Then $ \H $ is a near-field if and only if $ n = 2 $ or $ n = 3 $, and $ f(x) = x^2 + 1 $.
+\end{proposition}
+
+\begin{proof}
+Proof adopted from \cite{5}. \\
+Let $ \H \equiv (G, \oplus, \odot, (0, 0), (1, 0)) $ be a Hall quasi-field. It is sufficient to show the associativity property in both directions.
+\begin{enumerate}
+  \item Let $ \H $ be associative and constructed by $ f(x) \equiv x^2 - gx - h \in \F_n[x]_{\le 2} $, and fix $ (a, 0) \in G \setminus \{ (0, 0) \} $. It holds by associativity that: $$ (ha^{-1}, g) = (0, a) \odot (0, 1) = (0, 1) \odot (a, 0) \odot (0, 1) = (0, 1) \odot (0, a) = (ha, ga). $$ Hence $ ha^{-1} = ha $ and $ g = ga $. Now due to the irreducibility of $ f $, we have $ h \ne 0 $, so that $ a^2 = 1 $. The only fields with this property are $ \F_2 $ and $ \F_3 $. In $ \F_2 $, the only irreducible quadratic polynomial is $ f(x) = x^2 + 1 $. In $ \F_3 $, since $ a^2 = 1 $ also holds for $ a = -1 $, we have $ h = 0 $, which also narrows down the only irreducible quadratic polynomial to $ f(x) = x^2 + 1 $.
+  \item Conversely, the Hall quasi-field of order 4 is a field, and as such is associative. For the Hall quasi-field of order 9, let $ \H $ be constructed by $ f(x) \equiv x^2 + 1 \in \F_3[x]_{\le 2} $. Since $ b^{-1} = -b $ for any $ b \ne 0 $, multiplication is simply: $$ (a, b) \odot (c, d) = \begin{cases} (ac, ad) & b = 0 \\ (ac - b d (a^2 + 1), bc - ad) & b \ne 0 \end{cases}. $$ A simple verification shows that this indeed is associative.
+\end{enumerate}
+\end{proof}
+
+\subsection{Other non-Desarguesian planes}
+
+Due to $ \Omega $ not being self-dual, it is easy to coordinatise a third non-Desarguesian plane. This is done by applying plane duality, giving the dual plane with the same order. Thus, by a symmetrical construction of a dual Hall quasi-field, the definition of its dual plane is as follows.
+
+\begin{definition}[$ \Omega^D $]
+The finite projective plane $ \Omega^D $ is the dual plane of $ \Omega $.
+\end{definition}
+
+As such, it is clear that there are at least three distinctively non-isomorphic finite projective planes of order 9. In the original paper by O Veblen and J H Maclagan-Wedderburn in \cite{7}, it was discovered that there is in fact a fourth plane of order 9, which was later generalised into another family of planes by D R Hughes. This fourth plane, named after him, will not be discussed here, but it shall be denoted as follows.
+
+\begin{definition}[$ \Psi $]
+The \textbf{Hughes plane} $ \Psi $ is the fourth finite projective plane of order 9.
+\end{definition}
+
+\begin{remark}
+The Hughes plane $ \Psi $ is clearly self-dual, as otherwise a fifth plane would exist.
+\end{remark}
+
+Unfortunately, proving that these are the only four finite projective planes of order 9 is far more difficult. A computer-aided search, like that of the planes of order 10, was conducted in \cite{computersearch}, which ended in a negative. As such, it is now well-known that there are only exactly four non-isomorphic finite projective planes of order 9, namely $ \Phi $, $ \Omega $, $ \Omega^D $, and $ \Psi $. This is the first order of a plane for which a significant volume of additional theory linking algebra and geometry is inevitably introduced, leading to further insight to the full understanding of finite projective planes. Ultimately, the theory of finite projective planes is still far from complete.
+
+\printbibliography[heading=bibintoc]
+
+\nocite{*}
+
+\end{document}
